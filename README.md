@@ -4,6 +4,6 @@ Real time ray tracing renderer written as part of Computer Graphics 2 course at 
 
 **NOTE:** core renderer was implemented by course professor. 
 
-Showcase: <a href="http://nikolapacekvetnic.rs/?page_id=1253" target="_blank">http://nikolapacekvetnic.rs/?page_id=1253</a>
+Showcase: [http://nikolapacekvetnic.rs/?page_id=1253](http://nikolapacekvetnic.rs/?page_id=1253)
 
-Results: <a href="https://docs.google.com/spreadsheets/d/15lp3qq5IZw7YoQqvu7uGc3McOyZWdqTB3eph1BUGPfw/edit?usp=sharing" target="_blank">VoxelWorld_Results @ Google Sheets</a>
+Results: [VoxelWorld_Results @ Google Sheets](https://docs.google.com/spreadsheets/d/15lp3qq5IZw7YoQqvu7uGc3McOyZWdqTB3eph1BUGPfw/edit?usp=sharing)
