@@ -41,7 +41,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		double dz = 0.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.45;
+		double s = 0.65;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
