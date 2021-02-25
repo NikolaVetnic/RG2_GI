@@ -220,11 +220,7 @@ public class VoxelWorld implements Solid {
 					
 					if (!v[i][j][k]) continue;
 					
-					Vec3 p = Vec3.xyz(i, j, k);
-					
-					Box tmp = Box.$.pd(p, Vec3.EXYZ);
-					
-					Hit[] h = tmp.hits(ray);
+					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
 					if (h.length == 0) continue;
 					
@@ -288,11 +284,7 @@ public class VoxelWorld implements Solid {
 					
 					if (!v[i][j][k]) continue;
 					
-					Vec3 p = Vec3.xyz(i, j, k);
-					
-					Box tmp = Box.$.pd(p, Vec3.EXYZ);
-					
-					Hit[] h = tmp.hits(ray);
+					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
 					if (h.length == 0) continue;
 					
