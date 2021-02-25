@@ -1,5 +1,8 @@
 package graphics3d.solids;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,23 +11,97 @@ import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.paint.Color;
 
 public class VoxelWorld implements Solid {
 	
 	
-	private boolean[][][] v;
+	private Color[][][] v;
 	
 	
-	private VoxelWorld(boolean[][][] v) {
+	private VoxelWorld(Color[][][] v) {
 		this.v = v;
 	}
 	
 	
-	public static VoxelWorld v(boolean[][][] v) {
+	public static VoxelWorld v(Color[][][] v) {
 		return new VoxelWorld(v);
 	}
 	
 	
+	public static VoxelWorld set(String baseLayerPath) {
+		
+		String setPath = getSetPath(baseLayerPath);
+		String setName = getSetName(baseLayerPath);
+		String imgExtn = getImgExtn(baseLayerPath);
+		
+		Image image = null;
+		
+		try {
+			image = new Image(new FileInputStream(baseLayerPath));
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		int x = (int) image.getWidth();
+		int y = (int) image.getHeight();
+		int z = new File(setPath).listFiles().length;
+		
+		Color[][][] v = new Color[x][y][z];
+		
+		for (int k = 0; k < z; k++) {
+			
+			if (k != 0) {
+				try {
+					image = new Image(new FileInputStream(setPath + setName + "_" + String.format("%03d", k) + imgExtn));
+				} catch (FileNotFoundException e) {
+					System.err.println(e.getMessage());
+				}
+			}
+			
+			PixelReader pr = image.getPixelReader();
+			
+			for (int j = 0; j < y; j++) {
+				for (int i = 0; i < x; i++) {
+					v[i][j][k] = pr.getColor(i, j);
+				}
+			}
+		}
+		
+		return new VoxelWorld(v);
+	}
+	
+	
+	private static String getImgExtn(String baseLayerPath) {
+		String[] tokens = baseLayerPath.split("/");
+		String f = tokens[tokens.length - 1];
+		
+		return f.substring(f.length() - 4, f.length());
+	}
+
+
+	private static String getSetName(String baseLayerPath) {
+		
+		String[] tokens = baseLayerPath.split("/");
+		String f = tokens[tokens.length - 1];
+		
+		return f.substring(0, f.length() - 8);
+	}
+
+
+	private static String getSetPath(String baseLayerPath) {
+		
+		String[] tokens = baseLayerPath.split("/");
+		
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < tokens.length - 1; i++) sb.append(tokens[i] + "/");
+		
+		return sb.toString();
+	}
+
+
 	public static VoxelWorld bresenham(Vec3 p, Vec3 q) {
 		
 		int minX = (int) (p.x() < q.x() ? p.x() : q.x()); 
@@ -40,7 +117,7 @@ public class VoxelWorld implements Solid {
 			dy = (int) q.y(),
 			dz = (int) q.z();
 		
-		boolean[][][] v = new boolean[dx + 1][dy + 1][dz + 1];
+		Color[][][] v = new Color[dx + 1][dy + 1][dz + 1];
 		
 		int xc = 0,				// starting point at origin
 			yc = 0,
@@ -72,7 +149,7 @@ public class VoxelWorld implements Solid {
 				p1 += 2 * dy;
 				p2 += 2 * dz;
 				
-				v[xc][yc][zc] = true;
+				v[xc][yc][zc] = Color.WHITE;
 			}
 		} else if (dy >= dx && dy >= dz) {
 			
@@ -98,7 +175,7 @@ public class VoxelWorld implements Solid {
 				p1 += 2 * dx;
 				p2 += 2 * dz;
 				
-				v[xc][yc][zc] = true;
+				v[xc][yc][zc] = Color.WHITE;
 			}
 		} else {
 
@@ -124,7 +201,7 @@ public class VoxelWorld implements Solid {
 				p1 += 2 * dy;
 				p2 += 2 * dx;
 				
-				v[xc][yc][zc] = true;
+				v[xc][yc][zc] = Color.WHITE;
 			}
 		}
 		
@@ -168,7 +245,7 @@ public class VoxelWorld implements Solid {
 			for (int j = 0; j < sizeY(); j++) {
 				for (int k = 0; k < sizeZ(); k++) {
 					
-					if (!v[i][j][k]) continue;
+					if (v[i][j][k].getBrightness() == 0) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
@@ -199,7 +276,7 @@ public class VoxelWorld implements Solid {
 	}
 	
 
-	public Hit[] hitsID02(Ray ray) {
+	private Hit[] hitsID02(Ray ray) {
 	
 		/********************************************************************
 		 * 																	*
@@ -218,7 +295,7 @@ public class VoxelWorld implements Solid {
 			for (int j = 0; j < sizeY(); j++) {
 				for (int k = 0; k < sizeZ(); k++) {
 					
-					if (!v[i][j][k]) continue;
+					if (v[i][j][k].getBrightness() == 0) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
@@ -246,7 +323,7 @@ public class VoxelWorld implements Solid {
 	}
 	
 
-	public Hit[] hitsID03(Ray ray) {
+	private Hit[] hitsID03(Ray ray) {
 	
 		/********************************************************************
 		 * 																	*
@@ -282,7 +359,7 @@ public class VoxelWorld implements Solid {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 					
-					if (!v[i][j][k]) continue;
+					if (v[i][j][k].getBrightness() == 0) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
