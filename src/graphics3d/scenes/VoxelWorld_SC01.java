@@ -23,13 +23,13 @@ public class VoxelWorld_SC01 extends SceneBase {
 	public static class Factory implements Function1<Scene, Double> {
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double px = 0.0625;
+		double px = -.2500;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double py = 0.1250;
+		double py = 0.0625;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double pz = 0.3750;
+		double pz = 0.0;
 
 		@GadgetDouble(p = -5, q = 5)
 		double dx = 0.0;
@@ -41,7 +41,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		double dz = 0.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.65;
+		double s = 0.25;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -92,7 +92,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		// test object 02 : voxel set
 		
 		Solid obj02 = VoxelWorld.set("img/voxel_set_01/test_000.bmp").transformed(
-				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
+				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
