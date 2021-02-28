@@ -405,21 +405,21 @@ public class VoxelWorld implements Solid {
 		
 		if (bbHits.length == 0) return Solid.NO_HITS;
 		
-		Vec3 in = ray.at(bbHits[0].t());
-		int inX = (int) Math.floor(in.x());
-		int inY = (int) Math.floor(in.y());
-		int inZ = (int) Math.floor(in.z());
+		Vec3 v0 = ray.at(bbHits[0].t()).floor();
+		int x0 = v0.xInt(),
+			y0 = v0.yInt(),
+			z0 = v0.zInt();
 		
-		Vec3 out = ray.at(bbHits[1].t());
-		int outX = (int) Math.floor(out.x());
-		int outY = (int) Math.floor(out.y());
-		int outZ = (int) Math.floor(out.z());
+		Vec3 v1 = ray.at(bbHits[1].t()).floor();
+		int x1 = v1.xInt(),
+			y1 = v1.yInt(),
+			z1 = v1.zInt();
 		
-		if ( inX == sizeX())  inX--;	if ( inY == sizeY())  inY--;	if ( inZ == sizeZ())  inZ--;
-		if (outX == sizeX()) outX--;	if (outY == sizeY()) outY--;	if (outZ == sizeZ()) outZ--;
-		
-		if ( inX == -1)  inX++;	if ( inY == -1)  inY++;	if ( inZ == -1)  inZ++;
-		if (outX == -1) outX++;	if (outY == -1) outY++;	if (outZ == -1) outZ++;
+		if (x0 == sizeX()) x0--;	if (y0 == sizeY()) y0--;	if (z0 == sizeZ()) z0--;
+		if (x0 == -1) 	   x0++;	if (y0 == -1) 	   y0++;	if (z0 == -1) 	   z0++;
+
+		if (x1 == sizeX()) x1--;	if (y1 == sizeY()) y1--;	if (z1 == sizeZ()) z1--;
+		if (x1 == -1) 	   x1++;	if (y1 == -1) 	   y1++;	if (z1 == -1) 	   z1++;
 		
 		int xs = -1, xe = -1, xd =  0,
 			ys = -1, ye = -1, yd =  0,
@@ -430,22 +430,22 @@ public class VoxelWorld implements Solid {
 			dz = ray.d().z() >= 0 ?  +1 : -1;
 				
 		if (dx == 1) {
-			xs = inX + 1;		xe = sizeX();		xd = +1;
-		} else {
-			xs = outX;	xe = -1;		xd = -1;
-		}
-		
-		if (dy == 1) {
-			ys = inY + 1;		ye = sizeY();	yd = +1;
-		} else {
-			ys = sizeY() - 1;	ye = -1;		yd = -1;
-		}
-		
-		if (dz == 1) {
-			zs = 0;			ze = sizeZ();	zd = +1;
-		} else {
-			zs = sizeZ() - 1;	ze = -1;		zd = -1;
-		}
+            xs = x0;	xe = sizeX();	xd = +1;
+        } else {
+            xs = x0;	xe = -1;		xd = -1;
+        }
+        
+        if (dy == 1) {
+            ys = y0;	ye = sizeY();	yd = +1;
+        } else {
+            ys = y0;	ye = -1;		yd = -1;
+        }
+        
+        if (dz == 1) {
+            zs = z0;	ze = sizeZ();	zd = +1;
+        } else {
+            zs = z0;	ze = -1;		zd = -1;
+        }
 		
 		Hit[] hits = new Hit[sizeX() * sizeY() * sizeZ()];
 		int num = 0;
@@ -453,8 +453,8 @@ public class VoxelWorld implements Solid {
 		for (int i = xs; i != xe; i += xd) {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
-					
-					if (v[i][j][k].getBrightness() == 0) continue;
+
+					if (v[i][j][k] == null) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
@@ -468,7 +468,7 @@ public class VoxelWorld implements Solid {
 					} else {
 						hits[num++] = h[0];
 					}
-					
+
 					hits[num++] = h[1];
 				}
 			}

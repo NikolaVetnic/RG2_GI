@@ -63,6 +63,17 @@ public interface Solid {
 				
 				return hitsT;
 			}
+			
+			@Override
+			public Hit firstHit(Ray ray, double afterTime) {
+				Ray rayO = tInv.applyTo(ray);
+				Hit hitO = Solid.this.firstHit(rayO, afterTime * rayO.d().length());
+				if (hitO.t() == Double.POSITIVE_INFINITY) {
+					return hitO;
+				}
+				return hitO.withN(tInvT.applyTo(hitO.n_()));
+			}
+			
 		};
 	}
 	

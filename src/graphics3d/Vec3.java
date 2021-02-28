@@ -4,6 +4,8 @@ import mars.geometry.Vector;
 import mars.utils.Numeric;
 
 public class Vec3 {
+	
+	
 	public static final Vec3 ZERO = xyz(0, 0, 0);
 	public static final Vec3 EX   = xyz(1, 0, 0);
 	public static final Vec3 EY   = xyz(0, 1, 0);
@@ -14,8 +16,8 @@ public class Vec3 {
 	public static final Vec3 EXYZ = xyz(1, 1, 1);
 	public static final Vec3[] E  = {EX, EY, EZ};
 	
-	private final double x, y, z;
 	
+	private final double x, y, z;
 	
 	
 	public Vec3(double x, double y, double z) {
@@ -50,19 +52,13 @@ public class Vec3 {
 	}
 	
 	
-	public double x() {
-		return x;
-	}
+	public double x() 	{ return x; 		}
+	public double y() 	{ return y; 		}
+	public double z() 	{ return z; 		}
 	
-	
-	public double y() {
-		return y;
-	}
-	
-	
-	public double z() {
-		return z;
-	}
+	public int xInt() 	{ return (int) x; 	}
+	public int yInt() 	{ return (int) y; 	}
+	public int zInt() 	{ return (int) z; 	}
 	
 	
 	public double get(int i) {
@@ -104,6 +100,15 @@ public class Vec3 {
 		return xyz(x() / o.x(), y() / o.y(), z() / o.z());
 	}
 	
+	
+	public Vec3 floor() {
+		return xyz(Math.floor(x()), Math.floor(y()), Math.floor(z()));
+	}
+
+	
+	public Vec3 round() {
+		return xyz(Math.round(x()), Math.round(y()), Math.round(z()));
+	}
 	
 	
 	public double lengthSquared() {

@@ -13,6 +13,10 @@ import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.VoxelWorld;
+import graphics3d.solids.voxelworld.BruteForceArray;
+import graphics3d.solids.voxelworld.BruteForceList;
+import graphics3d.solids.voxelworld.DirArray;
+import graphics3d.solids.voxelworld.OptDirArray;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -75,14 +79,14 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		Vec3 dim = Vec3.xyz(7, 7, 7);
 		
-		javafx.scene.paint.Color[][][] rv = new javafx.scene.paint.Color[(int) dim.x()][(int) dim.y()][(int) dim.z()];
+		javafx.scene.paint.Color[][][] rv = new javafx.scene.paint.Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
-		for (int i = 0; i < (int) dim.x(); i++) 
-			for (int j = 0; j < (int) dim.y(); j++) 
-				for (int k = 0; k < (int) dim.z(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.35 ? javafx.scene.paint.Color.WHITE : javafx.scene.paint.Color.BLACK;
+		for (int i = 0; i < dim.xInt(); i++) 
+			for (int j = 0; j < dim.yInt(); j++) 
+				for (int k = 0; k < dim.zInt(); k++)
+					rv[i][j][k] = rng.nextDouble() < 0.35 ? javafx.scene.paint.Color.WHITE : null;
 		
-		Solid obj01 = VoxelWorld.v(rv).transformed(
+		Solid obj01 = OptDirArray.v(rv).transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
@@ -91,14 +95,14 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 02 : voxel set
 		
-		Solid obj02 = VoxelWorld.set("img/voxel_set_01/test_000.bmp").transformed(
+		Solid obj02 = OptDirArray.set("img/voxel_set_01/test_000.bmp").transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
 		.andThen(Transform.scaling			(s))))));;
 		
-		Solid vw = obj01;
+		Solid vw = obj02;
 		
 		Material mGlass 	= new Material(BSDF.glossyRefractive(Color.hsb(210, 0.2, 0.9), 1.4, s));
 		Material mFloor 	= new Material(BSDF.glossy(Color.hsb(  0, 0.0, 0.7), 0.4));
