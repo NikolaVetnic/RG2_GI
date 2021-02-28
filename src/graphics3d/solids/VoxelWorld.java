@@ -214,8 +214,13 @@ public class VoxelWorld implements Solid {
 	private int sizeZ()			{ return v[0][0].length;	}
 	
 	
+	private Hit[] getHits(Vec3 p, Vec3 d, Ray ray) {
+		return Box.$.pd(p, d).hits(ray);
+	}
+	
+	
 	private Hit[] getHits(Vec3 p, Ray ray) {
-		return Box.$.pd(p, Vec3.EXYZ).hits(ray);
+		return getHits(p, Vec3.EXYZ, ray);
 	}
 	
 	
@@ -223,7 +228,8 @@ public class VoxelWorld implements Solid {
 	public Hit[] hits(Ray ray) {
 //		return hitsID01(ray);
 //		return hitsID02(ray);
-		return hitsID03(ray);
+//		return hitsID03(ray);
+		return hitsID04(ray);
 	}
 
 
@@ -354,6 +360,95 @@ public class VoxelWorld implements Solid {
 		int 		   zs = -1, 		 ze = -1, 	   	   zd =  0;		
 		if (dz == 1) { zs =  0; 		 ze = sizeZ()    ; zd = +1; }
 		else		 { zs = sizeZ() - 1; ze = -1; 	   	   zd = -1; }
+		
+		for (int i = xs; i != xe; i += xd) {
+			for (int j = ys; j != ye; j += yd) {
+				for (int k = zs; k != ze; k += zd) {
+					
+					if (v[i][j][k].getBrightness() == 0) continue;
+					
+					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
+					
+					if (h.length == 0) continue;
+					
+					if (num > 0) {
+						if (Math.abs(hits[num - 1].t() - h[0].t()) > 1e-8)
+							hits[num++] = h[0];
+						else
+							num--;
+					} else {
+						hits[num++] = h[0];
+					}
+					
+					hits[num++] = h[1];
+				}
+			}
+		}
+		
+		if (num == 0) return Solid.NO_HITS;
+		
+		return Arrays.copyOf(hits, num);
+	}
+	
+	
+	private Hit[] hitsID04(Ray ray) {
+		
+		/********************************************************************
+		 * 																	*
+		 * ID : 04															*
+		 * 																	*
+		 * Description: 													*
+		 * 																	*
+		 *******************************************************************/
+		
+		Hit[] bbHits = getHits(Vec3.ZERO, Vec3.xyz(sizeX(), sizeY(), sizeZ()), ray);
+		
+		if (bbHits.length == 0) return Solid.NO_HITS;
+		
+		Vec3 in = ray.at(bbHits[0].t());
+		int inX = (int) Math.floor(in.x());
+		int inY = (int) Math.floor(in.y());
+		int inZ = (int) Math.floor(in.z());
+		
+		Vec3 out = ray.at(bbHits[1].t());
+		int outX = (int) Math.floor(out.x());
+		int outY = (int) Math.floor(out.y());
+		int outZ = (int) Math.floor(out.z());
+		
+		if ( inX == sizeX())  inX--;	if ( inY == sizeY())  inY--;	if ( inZ == sizeZ())  inZ--;
+		if (outX == sizeX()) outX--;	if (outY == sizeY()) outY--;	if (outZ == sizeZ()) outZ--;
+		
+		if ( inX == -1)  inX++;	if ( inY == -1)  inY++;	if ( inZ == -1)  inZ++;
+		if (outX == -1) outX++;	if (outY == -1) outY++;	if (outZ == -1) outZ++;
+		
+		int xs = -1, xe = -1, xd =  0,
+			ys = -1, ye = -1, yd =  0,
+			zs = -1, ze = -1, zd =  0;
+		
+		int dx = ray.d().x() >= 0 ?  +1 : -1,
+			dy = ray.d().y() >= 0 ?  +1 : -1,
+			dz = ray.d().z() >= 0 ?  +1 : -1;
+				
+		if (dx == 1) {
+			xs = inX + 1;		xe = sizeX();		xd = +1;
+		} else {
+			xs = outX;	xe = -1;		xd = -1;
+		}
+		
+		if (dy == 1) {
+			ys = inY + 1;		ye = sizeY();	yd = +1;
+		} else {
+			ys = sizeY() - 1;	ye = -1;		yd = -1;
+		}
+		
+		if (dz == 1) {
+			zs = 0;			ze = sizeZ();	zd = +1;
+		} else {
+			zs = sizeZ() - 1;	ze = -1;		zd = -1;
+		}
+		
+		Hit[] hits = new Hit[sizeX() * sizeY() * sizeZ()];
+		int num = 0;
 		
 		for (int i = xs; i != xe; i += xd) {
 			for (int j = ys; j != ye; j += yd) {

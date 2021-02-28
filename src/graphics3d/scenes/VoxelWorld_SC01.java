@@ -87,7 +87,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
-		.andThen(Transform.scaling			(s))))));;
+		.andThen(Transform.scaling			(s + 0.4))))));;
 		
 		// test object 02 : voxel set
 		
@@ -98,7 +98,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		.andThen(Transform.rotationAboutZ	(pz)
 		.andThen(Transform.scaling			(s))))));;
 		
-		Solid vw = obj02;
+		Solid vw = obj01;
 		
 		Material mGlass 	= new Material(BSDF.glossyRefractive(Color.hsb(210, 0.2, 0.9), 1.4, s));
 		Material mFloor 	= new Material(BSDF.glossy(Color.hsb(  0, 0.0, 0.7), 0.4));

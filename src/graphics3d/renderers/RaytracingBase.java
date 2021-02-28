@@ -3,6 +3,7 @@ package graphics3d.renderers;
 import graphics3d.*;
 import graphics3d.cameras.ThinLens;
 import graphics3d.colliders.BruteForce;
+import graphics3d.colliders.BruteForceFirstHit;
 import mars.geometry.Vector;
 import mars.random.sampling.Sampler;
 import mars.utils.Hashing;
@@ -34,7 +35,8 @@ public abstract class RaytracingBase implements Renderer {
 		this.scene = scene;
 		this.imageSize = imageSize;
 
-		collider = new BruteForce(scene.bodies());
+//		collider = new BruteForce(scene.bodies());
+		collider = new BruteForceFirstHit(scene.bodies());
 		camera = new ThinLens(focalDistance, focalBlurR);
 
 		samplers = new Sampler[imageSize.yInt()];

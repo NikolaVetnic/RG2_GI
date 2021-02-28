@@ -12,6 +12,23 @@ public interface Solid {
 	 * and exiting the solid, respectively.
 	 */
 	Hit[] hits(Ray ray);
+
+	
+	/**
+	 * Returns the first hit of the ray into the surface of the solid, occuring after the given time. The
+	 * default implementation is based on hits method, but implementations of Solid can choose to override
+	 * this method to increase performance when only the first hit is needed.
+	 * If there is no hit, return Hit.POSITIVE_INFINITY.
+	 */
+	default Hit firstHit(Ray ray, double afterTime) {
+		Hit[] hits = hits(ray);
+		for (Hit hit : hits) {
+			if (hit.t() > afterTime) {
+				return hit;
+			}
+		}
+		return Hit.POSITIVE_INFINITY;
+	}
 	
 	
 	// ==============================================================================================
