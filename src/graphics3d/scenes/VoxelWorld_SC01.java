@@ -12,11 +12,7 @@ import graphics3d.Solid;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.VoxelWorld;
-import graphics3d.solids.voxelworld.BruteForceArray;
-import graphics3d.solids.voxelworld.BruteForceList;
-import graphics3d.solids.voxelworld.DirArray;
-import graphics3d.solids.voxelworld.OptDirArray;
+import graphics3d.solids.voxelworld.OptDirArrayM;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -79,14 +75,14 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		Vec3 dim = Vec3.xyz(7, 7, 7);
 		
-		javafx.scene.paint.Color[][][] rv = new javafx.scene.paint.Color[dim.xInt()][dim.yInt()][dim.zInt()];
+		graphics3d.Color[][][] rv = new graphics3d.Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
 		for (int i = 0; i < dim.xInt(); i++) 
 			for (int j = 0; j < dim.yInt(); j++) 
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.35 ? javafx.scene.paint.Color.WHITE : null;
+					rv[i][j][k] = rng.nextDouble() < 0.35 ? graphics3d.Color.WHITE : null;
 		
-		Solid obj01 = OptDirArray.v(rv).transformed(
+		Solid obj01 = OptDirArrayM.arr(rv).transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
@@ -95,14 +91,14 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 02 : voxel set
 		
-		Solid obj02 = OptDirArray.set("img/voxel_set_01/test_000.bmp").transformed(
+		OptDirArrayM vw = OptDirArrayM.set("img/voxel_set_01/test_000.bmp");
+		
+		Solid obj02 = vw.transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
 		.andThen(Transform.scaling			(s))))));;
-		
-		Solid vw = obj02;
 		
 		Material mGlass 	= new Material(BSDF.glossyRefractive(Color.hsb(210, 0.2, 0.9), 1.4, s));
 		Material mFloor 	= new Material(BSDF.glossy(Color.hsb(  0, 0.0, 0.7), 0.4));
@@ -116,13 +112,14 @@ public class VoxelWorld_SC01 extends SceneBase {
 		Material mLight = Material.light(Color.hsb(0, 0.5, 120.0));
 		
 		bodies.addAll(List.of(
-//				Body.uniform(HalfSpace.pn(Vec3.xyz(-3, 0, 0), Vec3.xyz( 1, 0, 0)), mDiffuseR	 ),
-//				Body.uniform(HalfSpace.pn(Vec3.xyz( 3, 0, 0), Vec3.xyz(-1, 0, 0)), mDiffuseB	 ),
-//				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-3, 0), Vec3.xyz( 0, 1, 0)), mDiffuseB	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz(-5, 0, 0), Vec3.xyz( 1, 0, 0)), mDiffuseR	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-1, 0, 0)), mDiffuseB	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseB	 ),
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 9, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 3), Vec3.xyz( 0, 0,-1)), mDiffuseP	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseP	 ),
 				
-				Body.uniform(vw, mDiffuseY)
+//				Body.uniform(vw, mDiffuseY)
+				Body.v(obj02, vw.model())
 		));
 		
 		cameraTransform = Transform.IDENTITY

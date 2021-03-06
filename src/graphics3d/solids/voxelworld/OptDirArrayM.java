@@ -3,34 +3,34 @@ package graphics3d.solids.voxelworld;
 import java.util.Arrays;
 
 import graphics3d.Hit;
+import graphics3d.HitData;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
+import javafx.scene.paint.Color;
+import mars.geometry.Vector;
+import mars.utils.Numeric;
 
-public class OptDirArray extends Base {
+public class OptDirArrayM extends Base {
 	
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 04															*
+	 * ID : 05															*
 	 * 																	*
-	 * Description: uses array to store hits, the direction in which t-	*
-	 * he voxel array is iterrated is based on ray direction and starts *
-	 * from the point of entry into the baounding box, discards hits b- *
-	 * etween adjecent voxels; the array is trimmed and put out as usu- *
-	 * al; firstHit implemented.										*
+	 * Description: adds per-voxel material support to v04.				*
 	 * 																	*
 	 *******************************************************************/
 
 	
-	protected OptDirArray(graphics3d.Color[][][] model) {
+	protected OptDirArrayM(graphics3d.Color[][][] model) {
 		super(model);
 	}
 	
 	
-	public static OptDirArray arr(graphics3d.Color[][][] arr)			{ return new OptDirArray(arr); 							}
-	public static OptDirArray set(String baseLayerPath) 				{ return new OptDirArray(Loaders.set(baseLayerPath)); 	}
-	public static OptDirArray line(Vec3 p, Vec3 q, graphics3d.Color c) 	{ return new OptDirArray(Loaders.line(p, q, c)); 		}
+	public static OptDirArrayM arr(graphics3d.Color[][][] arr)			{ return new OptDirArrayM(arr); 						}
+	public static OptDirArrayM set(String baseLayerPath) 				{ return new OptDirArrayM(Loaders.set(baseLayerPath)); 	}
+	public static OptDirArrayM line(Vec3 p, Vec3 q, graphics3d.Color c) { return new OptDirArrayM(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -58,7 +58,7 @@ public class OptDirArray extends Base {
 					
 					if (h.length == 0) continue;
 					
-					if (h[0].t() > afterTime) return h[0];
+					if (h[0].t() > afterTime) return new HitVoxel(ray, h[0], i, j, k);
 				}
 			}
 		}
@@ -148,5 +148,35 @@ public class OptDirArray extends Base {
     		Vec3.xyz(ys, ye, yd),
     		Vec3.xyz(zs, ze, zd),
         };
+	}
+	
+	
+	class HitVoxel extends Hit.HitRayT {
+		
+		private Vec3 n_;
+		private int p, q, r;
+		
+		protected HitVoxel(Ray ray, double t) {
+			super(ray, t);
+		}
+		
+		protected HitVoxel(Ray ray, Hit h, int i, int j, int k) {
+			this(ray, h.t());
+			this.n_ = h.n_();
+			
+			this.p = i;
+			this.q = j;
+			this.r = k;
+		}
+		
+		@Override
+		public Vec3 n_() {
+			return n_;
+		}
+		
+		@Override
+		public Vector uv() {
+			return Vector.xy(p, (q << 4) + r);
+		}
 	}
 }

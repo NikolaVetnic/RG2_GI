@@ -6,7 +6,6 @@ import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
-import javafx.scene.paint.Color;
 
 public class BruteForceArray extends Base {
 	
@@ -22,14 +21,14 @@ public class BruteForceArray extends Base {
 	 *******************************************************************/
 
 	
-	protected BruteForceArray(Color[][][] v) {
-		super(v);
+	protected BruteForceArray(graphics3d.Color[][][] model) {
+		super(model);
 	}
 	
 	
-	public static BruteForceArray v(Color[][][] v) 				{ return new BruteForceArray(v); 							}
-	public static BruteForceArray set(String baseLayerPath) 		{ return new BruteForceArray(Loaders.set(baseLayerPath)); }
-	public static BruteForceArray line(Vec3 p, Vec3 q, Color c) 	{ return new BruteForceArray(Loaders.line(p, q, c)); 		}
+	public static BruteForceArray arr(graphics3d.Color[][][] arr)			{ return new BruteForceArray(arr); 							}
+	public static BruteForceArray set(String baseLayerPath) 				{ return new BruteForceArray(Loaders.set(baseLayerPath)); 	}
+	public static BruteForceArray line(Vec3 p, Vec3 q, graphics3d.Color c) 	{ return new BruteForceArray(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -42,7 +41,7 @@ public class BruteForceArray extends Base {
 			for (int j = 0; j < lenY(); j++) {
 				for (int k = 0; k < lenZ(); k++) {
 					
-					if (v[i][j][k] == null) continue;
+					if (model[i][j][k] == null) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					

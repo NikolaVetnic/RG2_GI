@@ -1,5 +1,7 @@
 package graphics3d;
 
+import mars.geometry.Vector;
+
 public interface Body {
 	
 	/**
@@ -67,4 +69,35 @@ public interface Body {
 		};
 	}
 	
+	
+	static Body v(Solid solid, graphics3d.Color[][][] model) {
+		return new Body() {
+			@Override
+			public Solid solid() {
+				return solid;
+			}
+			
+			public graphics3d.Color voxel(int i, int j, int k) {
+				return model[i][j][k];
+			}
+			
+			@Override
+			public Material materialAt(Hit hit) {
+				
+				Vector uv = hit.uv();
+				
+				int p = uv.xInt(), t = uv.yInt();
+				
+				int q = (t >> 4) & 15;
+				int r =  t 	     & 15;
+				
+				graphics3d.Color v = voxel(p, q, r);
+				
+				if (v != null)
+					return Material.diffuse(v);
+				else
+					return Material.diffuse(graphics3d.Color.WHITE);
+			}
+		};
+	}
 }

@@ -15,7 +15,6 @@ import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.Mesh;
 import graphics3d.solids.MeshWireframe;
-import graphics3d.solids.VoxelWorld;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;

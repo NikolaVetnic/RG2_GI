@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 public class Loaders {
 
 	
-	public static Color[][][] set(String baseLayerPath) {
+	public static graphics3d.Color[][][] set(String baseLayerPath) {
 		
 		String setPath = getSetPath(baseLayerPath);
 		String setName = getSetName(baseLayerPath);
@@ -30,7 +30,7 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = new File(setPath).listFiles().length;
 		
-		Color[][][] v = new Color[x][y][z];
+		graphics3d.Color[][][] model = new graphics3d.Color[x][y][z];
 		
 		for (int k = 0; k < z; k++) {
 			
@@ -47,12 +47,12 @@ public class Loaders {
 			for (int j = 0; j < y; j++) {
 				for (int i = 0; i < x; i++) {
 					Color c = pr.getColor(i, j);
-					v[i][j][k] = c.getBrightness() == 0 ? null : c;
+					model[i][j][k] = c.getBrightness() == 0 ? null : graphics3d.Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
 				}
 			}
 		}
 		
-		return v;
+		return model;
 	}
 	
 	
@@ -84,7 +84,7 @@ public class Loaders {
 	}
 	
 	
-	public static Color[][][] line(Vec3 p, Vec3 q, Color c) {
+	public static graphics3d.Color[][][] line(Vec3 p, Vec3 q, graphics3d.Color c) {
 		
 		int minX = (int) (p.x() < q.x() ? p.x() : q.x()); 
 		int minY = (int) (p.y() < q.y() ? p.y() : q.y());
@@ -99,7 +99,7 @@ public class Loaders {
 			dy = (int) q.y(),
 			dz = (int) q.z();
 		
-		Color[][][] v = new Color[dx + 1][dy + 1][dz + 1];
+		graphics3d.Color[][][] model = new graphics3d.Color[dx + 1][dy + 1][dz + 1];
 		
 		int xc = 0,				// starting point at origin
 			yc = 0,
@@ -131,7 +131,7 @@ public class Loaders {
 				p1 += 2 * dy;
 				p2 += 2 * dz;
 				
-				v[xc][yc][zc] = c;
+				model[xc][yc][zc] = c;
 			}
 		} else if (dy >= dx && dy >= dz) {
 			
@@ -157,7 +157,7 @@ public class Loaders {
 				p1 += 2 * dx;
 				p2 += 2 * dz;
 				
-				v[xc][yc][zc] = c;
+				model[xc][yc][zc] = c;
 			}
 		} else {
 
@@ -183,10 +183,10 @@ public class Loaders {
 				p1 += 2 * dy;
 				p2 += 2 * dx;
 				
-				v[xc][yc][zc] = c;
+				model[xc][yc][zc] = c;
 			}
 		}
 		
-		return v;
+		return model;
 	}
 }

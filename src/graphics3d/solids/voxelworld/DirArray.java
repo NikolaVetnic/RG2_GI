@@ -6,7 +6,6 @@ import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
-import javafx.scene.paint.Color;
 
 public class DirArray extends Base {
 	
@@ -23,14 +22,14 @@ public class DirArray extends Base {
 	 *******************************************************************/
 
 	
-	protected DirArray(Color[][][] v) {
+	protected DirArray(graphics3d.Color[][][] v) {
 		super(v);
 	}
 	
 	
-	public static DirArray v(Color[][][] v) 				{ return new DirArray(v); 								}
-	public static DirArray set(String baseLayerPath) 	{ return new DirArray(Loaders.set(baseLayerPath)); 	}
-	public static DirArray line(Vec3 p, Vec3 q, Color c) { return new DirArray(Loaders.line(p, q, c)); 		}
+	public static DirArray arr(graphics3d.Color[][][] arr)			{ return new DirArray(arr); 						}
+	public static DirArray set(String baseLayerPath) 				{ return new DirArray(Loaders.set(baseLayerPath)); 	}
+	public static DirArray line(Vec3 p, Vec3 q, graphics3d.Color c) { return new DirArray(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -46,7 +45,7 @@ public class DirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 					
-					if (v[i][j][k] == null) continue;
+					if (model[i][j][k] == null) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
@@ -77,7 +76,7 @@ public class DirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 					
-					if (v[i][j][k] == null) continue;
+					if (model[i][j][k] == null) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
