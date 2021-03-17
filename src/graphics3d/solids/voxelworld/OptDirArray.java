@@ -1,7 +1,9 @@
 package graphics3d.solids.voxelworld;
 
+import java.io.IOException;
 import java.util.Arrays;
 
+import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
@@ -12,7 +14,7 @@ public class OptDirArray extends Base {
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 04															*
+	 * ID : 03															*
 	 * 																	*
 	 * Description: uses array to store hits, the direction in which t-	*
 	 * he voxel array is iterrated is based on ray direction and starts *
@@ -23,14 +25,15 @@ public class OptDirArray extends Base {
 	 *******************************************************************/
 
 	
-	protected OptDirArray(graphics3d.Color[][][] model) {
+	protected OptDirArray(Color[][][] model) {
 		super(model);
 	}
 	
 	
-	public static OptDirArray arr(graphics3d.Color[][][] arr)			{ return new OptDirArray(arr); 							}
-	public static OptDirArray set(String baseLayerPath) 				{ return new OptDirArray(Loaders.set(baseLayerPath)); 	}
-	public static OptDirArray line(Vec3 p, Vec3 q, graphics3d.Color c) 	{ return new OptDirArray(Loaders.line(p, q, c)); 		}
+	public static OptDirArray arr(Color[][][] arr)			{ return new OptDirArray(arr); 							}
+	public static OptDirArray set(String baseLayerPath) throws IOException 	
+															{ return new OptDirArray(Loaders.set(baseLayerPath)); 	}
+	public static OptDirArray line(Vec3 p, Vec3 q, Color c) { return new OptDirArray(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -44,9 +47,9 @@ public class OptDirArray extends Base {
 		
 		Vec3[] loopData = getLoopData(ray, boundingBoxHits);
 		
-		int xs = loopData[0].xInt(),	xe = loopData[0].yInt(),	xd = loopData[0].zInt(),
-			ys = loopData[1].xInt(),	ye = loopData[1].yInt(),	yd = loopData[1].zInt(),
-			zs = loopData[2].xInt(),	ze = loopData[2].yInt(),	zd = loopData[2].zInt();
+		int xs = loopData[0].xInt(),	xe = loopData[1].xInt(),	xd = loopData[2].xInt(),
+			ys = loopData[0].yInt(),	ye = loopData[1].yInt(),	yd = loopData[2].yInt(),
+			zs = loopData[0].zInt(),	ze = loopData[1].zInt(),	zd = loopData[2].zInt();
 		
 		for (int i = xs; i != xe; i += xd) {
 			for (int j = ys; j != ye; j += yd) {
@@ -76,9 +79,9 @@ public class OptDirArray extends Base {
 		
 		Vec3[] loopData = getLoopData(ray, boundingBoxHits);
 		
-		int xs = loopData[0].xInt(),	xe = loopData[0].yInt(),	xd = loopData[0].zInt(),
-			ys = loopData[1].xInt(),	ye = loopData[1].yInt(),	yd = loopData[1].zInt(),
-			zs = loopData[2].xInt(),	ze = loopData[2].yInt(),	zd = loopData[2].zInt();
+		int xs = loopData[0].xInt(),	xe = loopData[1].xInt(),	xd = loopData[2].xInt(),
+			ys = loopData[0].yInt(),	ye = loopData[1].yInt(),	yd = loopData[2].yInt(),
+			zs = loopData[0].zInt(),	ze = loopData[1].zInt(),	zd = loopData[2].zInt();
 		
 		Hit[] hits = new Hit[lenX() * lenY() * lenZ()];
 		int num = 0;
@@ -131,22 +134,22 @@ public class OptDirArray extends Base {
 		if (x1 == lenX()) x1--;	if (y1 == lenY()) y1--;	if (z1 == lenZ()) z1--;
 		if (x1 == -1) 	  x1++;	if (y1 == -1) 	  y1++;	if (z1 == -1) 	  z1++;
 		
-		int xs = -1, xe = -1, xd =  0,
-			ys = -1, ye = -1, yd =  0,
-			zs = -1, ze = -1, zd =  0;
+		int xs = -1, xe = -1,
+			ys = -1, ye = -1,
+			zs = -1, ze = -1;
 		
-		int dx = ray.d().x() >= 0 ?  +1 : -1,
-			dy = ray.d().y() >= 0 ?  +1 : -1,
-			dz = ray.d().z() >= 0 ?  +1 : -1;
+		int xd = ray.d().x() >= 0 ?  +1 : -1,
+			yd = ray.d().y() >= 0 ?  +1 : -1,
+			zd = ray.d().z() >= 0 ?  +1 : -1;
 			
-		xs = x0;	xe = x1 + dx;	xd = dx;
-		ys = y0;	ye = y1 + dy;	yd = dy;
-		zs = z0;	ze = z1 + dz;	zd = dz;
-        
-        return new Vec3[] { 
-    		Vec3.xyz(xs, xe, xd),
-    		Vec3.xyz(ys, ye, yd),
-    		Vec3.xyz(zs, ze, zd),
-        };
+		xs = x0;	xe = x1 + xd;
+		ys = y0;	ye = y1 + yd;
+		zs = z0;	ze = z1 + zd;
+		
+		return new Vec3[] { 
+	    		Vec3.xyz(xs, ys, zs),
+	    		Vec3.xyz(xe, ye, ze),
+	    		Vec3.xyz(xd, yd, zd),
+	        };
 	}
 }

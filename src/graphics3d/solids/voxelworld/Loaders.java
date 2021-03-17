@@ -3,16 +3,17 @@ package graphics3d.solids.voxelworld;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import graphics3d.Color;
 import graphics3d.Vec3;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
-import javafx.scene.paint.Color;
 
 public class Loaders {
 
 	
-	public static graphics3d.Color[][][] set(String baseLayerPath) {
+	public static Color[][][] set(String baseLayerPath) throws IOException {
 		
 		String setPath = getSetPath(baseLayerPath);
 		String setName = getSetName(baseLayerPath);
@@ -30,24 +31,19 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = new File(setPath).listFiles().length;
 		
-		graphics3d.Color[][][] model = new graphics3d.Color[x][y][z];
+		Color[][][] model = new Color[x][y][z];
 		
 		for (int k = 0; k < z; k++) {
 			
-			if (k != 0) {
-				try {
-					image = new Image(new FileInputStream(setPath + setName + "_" + String.format("%03d", k) + imgExtn));
-				} catch (FileNotFoundException e) {
-					System.err.println(e.getMessage());
-				}
-			}
+			if (k != 0)
+				image = new Image(new FileInputStream(setPath + setName + "_" + String.format("%03d", k) + imgExtn));
 			
 			PixelReader pr = image.getPixelReader();
 			
 			for (int j = 0; j < y; j++) {
 				for (int i = 0; i < x; i++) {
-					Color c = pr.getColor(i, j);
-					model[i][j][k] = c.getBrightness() == 0 ? null : graphics3d.Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+					javafx.scene.paint.Color c = pr.getColor(i, j);
+					model[i][j][k] = c.getBrightness() == 0 ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
 				}
 			}
 		}
@@ -60,7 +56,7 @@ public class Loaders {
 		String[] tokens = baseLayerPath.split("/");
 		String f = tokens[tokens.length - 1];
 		
-		return f.substring(f.length() - 4, f.length());
+		return f.substring(f.length() - 4);
 	}
 
 
@@ -84,7 +80,7 @@ public class Loaders {
 	}
 	
 	
-	public static graphics3d.Color[][][] line(Vec3 p, Vec3 q, graphics3d.Color c) {
+	public static Color[][][] line(Vec3 p, Vec3 q, Color c) {
 		
 		int minX = (int) (p.x() < q.x() ? p.x() : q.x()); 
 		int minY = (int) (p.y() < q.y() ? p.y() : q.y());
@@ -99,7 +95,7 @@ public class Loaders {
 			dy = (int) q.y(),
 			dz = (int) q.z();
 		
-		graphics3d.Color[][][] model = new graphics3d.Color[dx + 1][dy + 1][dz + 1];
+		Color[][][] model = new Color[dx + 1][dy + 1][dz + 1];
 		
 		int xc = 0,				// starting point at origin
 			yc = 0,

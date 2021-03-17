@@ -1,5 +1,6 @@
 package graphics3d.scenes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -41,7 +42,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		double dz = 0.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.25;
+		double s = 0.15;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -60,12 +61,27 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		@Override
 		public Scene at(Double time) {
-			return new VoxelWorld_SC01(seed, cameraAngle, px, py, pz, xInt, yInt, zInt, dx, dy, dz, s, Numeric.interpolateLinear(-0.4, -4, time));
+			try {
+				return new VoxelWorld_SC01(
+						seed, cameraAngle, 
+						px, py, pz, 
+						xInt, yInt, zInt, 
+						dx, dy, dz, 
+						s, Numeric.interpolateLinear(-0.4, -4, time));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
 		}
 	}
 	
 	
-	public VoxelWorld_SC01(int seed, double cameraAngle, double px, double py, double pz, int xInt, int yInt, int zInt, double dx, double dy, double dz, double s, double z) {
+	public VoxelWorld_SC01(
+			int 	seed, 	double 	cameraAngle, 
+			double 	px, 	double 	py, 		double 	pz, 
+			int 	xInt, 	int 	yInt, 		int 	zInt, 
+			double 	dx, 	double 	dy, 		double 	dz, 
+			double 	s, 		double 	z) throws IOException {
 		
 		colorBackground = Color.WHITE;
 		
@@ -73,21 +89,21 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 01 : random voxel array 
 		
-		Vec3 dim = Vec3.xyz(7, 7, 7);
+		Vec3 dim = Vec3.xyz(30, 30, 30);
 		
-		graphics3d.Color[][][] rv = new graphics3d.Color[dim.xInt()][dim.yInt()][dim.zInt()];
+		Color[][][] rv = new Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
 		for (int i = 0; i < dim.xInt(); i++) 
 			for (int j = 0; j < dim.yInt(); j++) 
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.35 ? graphics3d.Color.WHITE : null;
+					rv[i][j][k] = rng.nextDouble() < 0.15 ? Color.rgb(2., 0.0, 0.0) : null;
 		
 		Solid obj01 = OptDirArrayM.arr(rv).transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
-		.andThen(Transform.scaling			(s + 0.4))))));;
+		.andThen(Transform.scaling			(s + 0.0))))));;
 		
 		// test object 02 : voxel set
 		
@@ -112,14 +128,16 @@ public class VoxelWorld_SC01 extends SceneBase {
 		Material mLight = Material.light(Color.hsb(0, 0.5, 120.0));
 		
 		bodies.addAll(List.of(
-				Body.uniform(HalfSpace.pn(Vec3.xyz(-5, 0, 0), Vec3.xyz( 1, 0, 0)), mDiffuseR	 ),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-1, 0, 0)), mDiffuseB	 ),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseB	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz(-5, 0, 0), Vec3.xyz( 5, 0, 0)), mDiffuseB	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-5, 0, 0)), mDiffuseB	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseB	 ),
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 9, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseP	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseG	 ),
 				
 //				Body.uniform(vw, mDiffuseY)
-				Body.v(obj02, vw.model())
+//				Body.v(obj02, vw.model())
+//				Body.uniform(obj01, mDiffuseR)
+				Body.v(obj01, rv)
 		));
 		
 		cameraTransform = Transform.IDENTITY

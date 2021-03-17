@@ -1,18 +1,20 @@
 package graphics3d.solids.voxelworld;
 
+import java.io.IOException;
 import java.util.Arrays;
 
+import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 
-public class DirArray extends Base {
+public class DirArr extends Base {
 	
 
 	/********************************************************************
 	 * 																	*
-	 * ID : 03															*
+	 * ID : 02															*
 	 * 																	*
 	 * Description: uses array to store hits, the direction in which t-	*
 	 * he voxel array is iterrated is based on the ray direction, disc-	*
@@ -22,14 +24,15 @@ public class DirArray extends Base {
 	 *******************************************************************/
 
 	
-	protected DirArray(graphics3d.Color[][][] v) {
+	protected DirArr(Color[][][] v) {
 		super(v);
 	}
 	
 	
-	public static DirArray arr(graphics3d.Color[][][] arr)			{ return new DirArray(arr); 						}
-	public static DirArray set(String baseLayerPath) 				{ return new DirArray(Loaders.set(baseLayerPath)); 	}
-	public static DirArray line(Vec3 p, Vec3 q, graphics3d.Color c) { return new DirArray(Loaders.line(p, q, c)); 		}
+	public static DirArr arr(Color[][][] arr)			{ return new DirArr(arr); 							}
+	public static DirArr set(String baseLayerPath) throws IOException 		
+														{ return new DirArr(Loaders.set(baseLayerPath)); 	}
+	public static DirArr line(Vec3 p, Vec3 q, Color c) 	{ return new DirArr(Loaders.line(p, q, c)); 		}
 
 	
 	@Override

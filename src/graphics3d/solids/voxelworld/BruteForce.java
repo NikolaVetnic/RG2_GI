@@ -1,18 +1,20 @@
 package graphics3d.solids.voxelworld;
 
+import java.io.IOException;
 import java.util.Arrays;
 
+import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 
-public class BruteForceArray extends Base {
+public class BruteForce extends Base {
 	
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 02															*
+	 * ID : 01															*
 	 * 																	*
 	 * Description: uses array to store hits, discards hits between	ad- *
 	 * jecent voxels, sorts the array by comparing hit times; the array	*
@@ -21,14 +23,47 @@ public class BruteForceArray extends Base {
 	 *******************************************************************/
 
 	
-	protected BruteForceArray(graphics3d.Color[][][] model) {
+	protected BruteForce(Color[][][] model) {
 		super(model);
 	}
 	
 	
-	public static BruteForceArray arr(graphics3d.Color[][][] arr)			{ return new BruteForceArray(arr); 							}
-	public static BruteForceArray set(String baseLayerPath) 				{ return new BruteForceArray(Loaders.set(baseLayerPath)); 	}
-	public static BruteForceArray line(Vec3 p, Vec3 q, graphics3d.Color c) 	{ return new BruteForceArray(Loaders.line(p, q, c)); 		}
+	public static BruteForce arr(Color[][][] arr)			{ return new BruteForce(arr); 							}
+	public static BruteForce set(String baseLayerPath) throws IOException 		
+															{ return new BruteForce(Loaders.set(baseLayerPath)); 	}
+	public static BruteForce line(Vec3 p, Vec3 q, Color c) 	{ return new BruteForce(Loaders.line(p, q, c)); 		}
+	
+	
+	@Override
+	public Hit firstHit(Ray ray, double afterTime) {
+		
+		Hit out = Hit.POSITIVE_INFINITY;
+		
+		for (int i = 0; i < lenX(); i++) {
+			for (int j = 0; j < lenY(); j++) {
+				for (int k = 0; k < lenZ(); k++) {
+					
+					if (model[i][j][k] == null) continue;
+					
+					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
+					
+					if (h.length == 0) continue;
+					
+					if (h[0].t() > afterTime) {
+						if (h[0].t() < out.t()) {
+							out = h[0];
+						}
+					} else if (h[1].t() > afterTime){
+						if (h[1].t() < out.t()) {
+							out = h[1];
+						}
+					}	
+				}
+			}
+		}
+		
+		return out;
+	}
 
 	
 	@Override
