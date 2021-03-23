@@ -13,6 +13,10 @@ import graphics3d.Solid;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
+import graphics3d.solids.voxelworld.BruteForce;
+import graphics3d.solids.voxelworld.DirArray;
+import graphics3d.solids.voxelworld.GridMarch;
+import graphics3d.solids.voxelworld.OptDirArray;
 import graphics3d.solids.voxelworld.OptDirArrayM;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
@@ -24,10 +28,10 @@ public class VoxelWorld_SC01 extends SceneBase {
 	public static class Factory implements Function1<Scene, Double> {
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double px = -.2500;
+		double px = -0.375;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double py = 0.0625;
+		double py = -0.375;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
 		double pz = 0.0;
@@ -42,7 +46,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		double dz = 0.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.15;
+		double s = .5;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -89,16 +93,16 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 01 : random voxel array 
 		
-		Vec3 dim = Vec3.xyz(30, 30, 30);
+		Vec3 dim = Vec3.xyz(10, 10, 10);
 		
 		Color[][][] rv = new Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
 		for (int i = 0; i < dim.xInt(); i++) 
 			for (int j = 0; j < dim.yInt(); j++) 
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.15 ? Color.rgb(2., 0.0, 0.0) : null;
+					rv[i][j][k] = rng.nextDouble() < 0.5 ? Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0) : null;
 		
-		Solid obj01 = OptDirArrayM.arr(rv).transformed(
+		Solid obj01 = GridMarch.arr(rv).transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
@@ -107,7 +111,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 02 : voxel set
 		
-		OptDirArrayM vw = OptDirArrayM.set("img/voxel_set_01/test_000.bmp");
+		OptDirArrayM vw = OptDirArrayM.set("img/voxel_set_02/room_000.bmp");
 		
 		Solid obj02 = vw.transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
@@ -132,7 +136,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 //				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-5, 0, 0)), mDiffuseB	 ),
 //				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseB	 ),
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 9, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseG	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseY	 ),
 				
 //				Body.uniform(vw, mDiffuseY)
 //				Body.v(obj02, vw.model())

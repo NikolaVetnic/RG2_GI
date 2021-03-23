@@ -22,6 +22,14 @@ abstract class Base implements Solid {
 	protected int lenY()	{ return model[0].length;		}
 	protected int lenZ()	{ return model[0][0].length;	}
 	
+	protected Color cell(int i, int j, int k) {
+		return model[i][j][k]; 		
+	}
+	
+	protected Color cell(Vec3 p) { 
+		return model[p.xInt()][p.yInt()][p.zInt()]; 
+	}
+	
 	
 	public Color[][][] model() {
 		return model;

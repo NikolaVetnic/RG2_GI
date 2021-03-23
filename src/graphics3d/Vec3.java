@@ -111,6 +111,11 @@ public class Vec3 {
 	}
 	
 	
+	public Vec3 signum() {
+		return xyz(Math.signum(x()), Math.signum(y()), Math.signum(z()));
+	}
+	
+	
 	public double lengthSquared() {
 		return x() * x() + y() * y() + z() * z();
 	}

@@ -20,7 +20,7 @@ public class PathTracer extends RaytracingBase {
 		double focalBlurR = 0;
 		
 		@GadgetInteger(min = 0)
-		int maxDepth = 100;
+		int maxDepth = 10;
 		
 		@Override
 		public Renderer at(Scene scene, Vector imageSize) {
