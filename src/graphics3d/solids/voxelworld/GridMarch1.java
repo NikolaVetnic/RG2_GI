@@ -9,7 +9,7 @@ import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 
-public class GridMarch extends Base {
+public class GridMarch1 extends Base {
 	
 	
 	/********************************************************************
@@ -21,15 +21,15 @@ public class GridMarch extends Base {
 	 *******************************************************************/
 
 	
-	protected GridMarch(Color[][][] model) {
+	protected GridMarch1(Color[][][] model) {
 		super(model);
 	}
 	
 	
-	public static GridMarch arr(Color[][][] arr)			{ return new GridMarch(arr); 						}
-	public static GridMarch set(String baseLayerPath) throws IOException 		
-															{ return new GridMarch(Loaders.set(baseLayerPath)); }
-	public static GridMarch line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch(Loaders.line(p, q, c)); 		}
+	public static GridMarch1 arr(Color[][][] arr)			{ return new GridMarch1(arr); 						}
+	public static GridMarch1 set(String baseLayerPath) throws IOException 		
+															{ return new GridMarch1(Loaders.set(baseLayerPath)); }
+	public static GridMarch1 line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch1(Loaders.line(p, q, c)); 		}
 
 	
 	@Override

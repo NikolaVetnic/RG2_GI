@@ -254,4 +254,14 @@ public class Vec3 {
 	public static Vec3 lerp(Vec3 v0, Vec3 v1, double t) {
 		return v0.mul(1 - t).add(v1.mul(t));
 	}
+	
+	
+	public boolean inBoundingBox(Vec3 v) {
+		if (xInt() != v.xInt() && xInt() != -1. && 
+			yInt() != v.yInt() && yInt() != -1. &&
+			zInt() != v.zInt() && zInt() != -1. )
+			return true;
+		
+		return false;
+	}
 }

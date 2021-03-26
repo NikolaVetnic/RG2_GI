@@ -15,7 +15,8 @@ import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.voxelworld.BruteForce;
 import graphics3d.solids.voxelworld.DirArray;
-import graphics3d.solids.voxelworld.GridMarch;
+import graphics3d.solids.voxelworld.GridMarch1;
+import graphics3d.solids.voxelworld.GridMarch3;
 import graphics3d.solids.voxelworld.OptDirArray;
 import graphics3d.solids.voxelworld.OptDirArrayM;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
@@ -46,7 +47,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		double dz = 0.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = .5;
+		double s = .05;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -93,16 +94,16 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 01 : random voxel array 
 		
-		Vec3 dim = Vec3.xyz(10, 10, 10);
+		Vec3 dim = Vec3.xyz(250, 250, 250);
 		
 		Color[][][] rv = new Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
 		for (int i = 0; i < dim.xInt(); i++) 
 			for (int j = 0; j < dim.yInt(); j++) 
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.5 ? Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0) : null;
+					rv[i][j][k] = rng.nextDouble() < 0.05 ? Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0) : null;
 		
-		Solid obj01 = GridMarch.arr(rv).transformed(
+		Solid obj01 = GridMarch3.arr(rv).transformed(
 				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)

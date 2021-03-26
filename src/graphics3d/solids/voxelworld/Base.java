@@ -18,6 +18,9 @@ abstract class Base implements Solid {
 	}
 	
 	
+	protected Vec3 len()	{ return Vec3.xyz(
+								lenX(), lenY(), lenZ()); 	}
+	
 	protected int lenX()	{ return model.length;			}
 	protected int lenY()	{ return model[0].length;		}
 	protected int lenZ()	{ return model[0][0].length;	}
@@ -48,6 +51,11 @@ abstract class Base implements Solid {
 	
 	protected static Hit[] getHits(Vec3 p, Ray ray) {
 		return getHits(p, Vec3.EXYZ, ray);
+	}
+	
+	
+	protected Hit[] getBoundingBoxHits(Ray ray) {
+		return getHits(Vec3.ZERO, len(), ray);
 	}
 	
 	

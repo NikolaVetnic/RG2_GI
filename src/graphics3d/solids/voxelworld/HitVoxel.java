@@ -17,6 +17,11 @@ public class HitVoxel extends Hit.HitRayT implements Comparable<HitVoxel> {
 	}
 	
 	
+	protected HitVoxel(Ray ray, Hit h, Vec3 p) {
+		this(ray, h, p.xInt(), p.yInt(), p.zInt());
+	}
+	
+	
 	protected HitVoxel(Ray ray, Hit h, int i, int j, int k) {
 		this(ray, h.t());
 		this.n_ = h.n_();
