@@ -11,29 +11,38 @@ abstract class Base implements Solid {
 	
 	
 	protected Color[][][] model;
+	protected Vec3 len;
 	
 	
 	protected Base(graphics3d.Color[][][] model) { 
 		this.model = model;
+		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
 	}
 	
 	
-	protected Vec3 len()	{ return Vec3.xyz(
-								lenX(), lenY(), lenZ()); 	}
+	protected Vec3 len()	{ return len; 			}
 	
-	protected int lenX()	{ return model.length;			}
-	protected int lenY()	{ return model[0].length;		}
-	protected int lenZ()	{ return model[0][0].length;	}
+	
+	protected int lenX()	{ return len.xInt();	}
+	protected int lenY()	{ return len.yInt();	}
+	protected int lenZ()	{ return len.zInt();	}
+	
 	
 	protected Color cell(int i, int j, int k) {
 		return model[i][j][k]; 		
 	}
+	
 	
 	protected Color cell(Vec3 p) { 
 		return model[p.xInt()][p.yInt()][p.zInt()]; 
 	}
 	
 	
+	protected int[] lenA() {
+		return new int[] { lenX(), lenY(), lenZ() };
+	}
+	
+
 	public Color[][][] model() {
 		return model;
 	}

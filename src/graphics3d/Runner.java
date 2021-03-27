@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 
 public class Runner implements Drawing {
 	
-	static final Vector imageSize = Vector.xy(640, 640);
+	static final Vector imageSize = Vector.xy(1080, 1080);
 	static final PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
 	static final int PARALLELISM = ForkJoinPool.getCommonPoolParallelism();
 	

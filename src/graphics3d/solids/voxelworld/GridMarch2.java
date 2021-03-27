@@ -12,27 +12,27 @@ import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
 import mars.utils.Numeric;
 
-public class GridMarch3 extends Base {
+public class GridMarch2 extends Base {
 	
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 05															*
+	 * ID : 0x															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
 
 	
-	protected GridMarch3(Color[][][] model) {
+	protected GridMarch2(Color[][][] model) {
 		super(model);
 	}
 	
 	
-	public static GridMarch3 arr(Color[][][] arr)			{ return new GridMarch3(arr); 						}
-	public static GridMarch3 set(String baseLayerPath) throws IOException 		
-															{ return new GridMarch3(Loaders.set(baseLayerPath)); }
-	public static GridMarch3 line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch3(Loaders.line(p, q, c)); 		}
+	public static GridMarch2 arr(Color[][][] arr)			{ return new GridMarch2(arr); 						}
+	public static GridMarch2 set(String baseLayerPath) throws IOException 		
+															{ return new GridMarch2(Loaders.set(baseLayerPath)); }
+	public static GridMarch2 line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch2(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -74,6 +74,8 @@ public class GridMarch3 extends Base {
 	
 	@Override
 	public Hit[] hits(Ray ray) {
+		
+		// NOT YET IMPLEMENTED
 		
 		Hit[] boundingBoxHits = getHits(Vec3.ZERO, Vec3.xyz(lenX(), lenY(), lenZ()), ray);
 		
