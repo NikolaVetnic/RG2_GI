@@ -60,13 +60,13 @@ public class GridMarch3 extends Base {
 		while (v0.inBoundingBox(v1)) {
 			
 			// old approach
-			if (cell(v0) != null) {				
-				
-				Hit[] hits = getHits(v0, ray);
-				
-				if (cell(v0) != null && hits[0].t() > afterTime)
-					return new HitVoxel(ray, hits[0], v0);
-			}
+//			if (cell(v0) != null) {				
+//				
+//				Hit[] hits = getHits(v0, ray);
+//				
+//				if (cell(v0) != null && hits[0].t() > afterTime)
+//					return new HitVoxel(ray, hits[0], v0);
+//			}
 			
 			// idea taken from Box.hits() method
 //			if (cell(v0) != null) {
@@ -77,6 +77,9 @@ public class GridMarch3 extends Base {
 //				if (v.max() > afterTime)
 //					return new HitVoxel(ray, HitData.tn(v.max(), Vec3.E[v.maxIndex()].mul(s1)), v0);
 //			}
+			
+			if (cell(v0) != null && t.min() > afterTime)
+				return new HitVoxel(ray, HitData.tn(t.min(), s1.mul(Vec3.E[t.minIndex()])), v0);
 
 			Vec3 tNext = t.add(dt);
 			int k = tNext.minIndex();
