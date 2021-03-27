@@ -48,43 +48,24 @@ public class GridMarch3 extends Base {
 		
 		Vec3 s0 = ray.d().signum();
 		Vec3 s1 = s0.inverse();
-		Vec3 s2 = s1.add(Vec3.EXYZ).mul(0.5).inverse();
+		Vec3 s2 = s1.add(Vec3.EXYZ).mul(0.5);
 		
 		Vec3 t = Vec3.xyz(
 				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EX)).hits(ray)[0].t(), 
 				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EY)).hits(ray)[0].t(), 
 				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EZ)).hits(ray)[0].t());
 
-		Vec3 dt = Vec3.EXYZ.div(ray.d());
+		Vec3 dt = s0.div(ray.d());
 		
 		while (v0.inBoundingBox(v1)) {
 			
-			// old approach
-//			if (cell(v0) != null) {				
-//				
-//				Hit[] hits = getHits(v0, ray);
-//				
-//				if (cell(v0) != null && hits[0].t() > afterTime)
-//					return new HitVoxel(ray, hits[0], v0);
-//			}
-			
-			// idea taken from Box.hits() method
-//			if (cell(v0) != null) {
-//				
-//				Vec3 u = v0.add(Vec3.EXYZ).sub(ray.p()).div(ray.d());	// exit time from current voxel
-//				Vec3 v = Vec3.min(t, u);
-//				
-//				if (v.max() > afterTime)
-//					return new HitVoxel(ray, HitData.tn(v.max(), Vec3.E[v.maxIndex()].mul(s1)), v0);
-//			}
-			
-			if (cell(v0) != null && t.min() > afterTime)
-				return new HitVoxel(ray, HitData.tn(t.min(), s1.mul(Vec3.E[t.minIndex()])), v0);
+			if (cell(v0) != null && t.max() > afterTime)
+				return new HitVoxel(ray, HitData.tn(t.max(), s1.mul(Vec3.E[t.maxIndex()])), v0);
 
 			Vec3 tNext = t.add(dt);
 			int k = tNext.minIndex();
 			v0 = v0.add(s0.mul(Vec3.E[k]));
-			t = t.add(dt.mul(s0.mul(Vec3.E[k])));
+			t = t.add(dt.mul(Vec3.E[k]));
 		}
 		
 		return Hit.POSITIVE_INFINITY;
