@@ -29,7 +29,9 @@ public class GridMarch2Opt extends Base {
 	
 	public static GridMarch2Opt arr(Color[][][] arr)			{ return new GridMarch2Opt(arr); 						}
 	public static GridMarch2Opt set(String baseLayerPath) throws IOException 		
-															{ return new GridMarch2Opt(Loaders.set(baseLayerPath)); }
+																{ return new GridMarch2Opt(Loaders.set(baseLayerPath)); }
+	public static GridMarch2Opt map(String path) throws IOException
+																{ return new GridMarch2Opt(Loaders.map(path)); 			}
 	public static GridMarch2Opt line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch2Opt(Loaders.line(p, q, c)); 		}
 
 	

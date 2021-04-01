@@ -11,6 +11,42 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
 public class Loaders {
+	
+	
+	private static final int DEFAULT_MAP_HEIGHT = 50;
+	
+	
+	public static Color[][][] map(String path) throws IOException {
+		
+		Image image = null;
+		
+		try {
+			image = new Image(new FileInputStream(path));
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		int x = (int) image.getWidth();
+		int y = (int) image.getHeight();
+		int z = DEFAULT_MAP_HEIGHT;
+		
+		Color[][][] model = new Color[x][y][z];
+		
+		PixelReader pr = image.getPixelReader();
+		
+		for (int j = 0; j < y; j++) {
+			for (int i = 0; i < x; i++) {
+				
+				javafx.scene.paint.Color c = pr.getColor(i, j);
+				int currZ = (int) (c.getBrightness() * z);
+				
+				for (int k = 0; k < currZ; k++)
+					model[i][j][k] = Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+			}
+		}
+		
+		return model;
+	}
 
 	
 	public static Color[][][] set(String baseLayerPath) throws IOException {
@@ -43,7 +79,8 @@ public class Loaders {
 			for (int j = 0; j < y; j++) {
 				for (int i = 0; i < x; i++) {
 					javafx.scene.paint.Color c = pr.getColor(i, j);
-					model[i][j][k] = c.getBrightness() == 0 ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+					model[i][j][k] = c.toString().equals("0xffffffff") ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+//					model[i][j][k] = c.getOpacity() == 0 ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
 				}
 			}
 		}

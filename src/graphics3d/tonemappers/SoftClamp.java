@@ -18,15 +18,18 @@ public class SoftClamp implements ToneMapper {
 
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 0x1p-16, q = 0x1p+16)
-		double preFactor = 0x1p-2;
+//		double preFactor = 1.0;
+		double preFactor = .35;
 		
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 0x1p-4, q = 0x1p+4)
-		double p1 = 1.0;
+//		double p1 = 1.0;
+		double p1 = 2.45;
 		
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 0x1p-4, q = 0x1p+4)
-		double p2 = 1.0;
+//		double p2 = 1.0;
+		double p2 = .615;
 
 		@Override
 		public ToneMapper at() {

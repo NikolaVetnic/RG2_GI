@@ -15,15 +15,18 @@ public class Soft2 implements ToneMapper {
 	public static class Factory implements Function0<ToneMapper> {
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 0.001, q = 1000)
-		double preFactor = 1.0;
+//		double preFactor = 1.0;
+		double preFactor = .35;
 		
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 1.0/16, q = 16)
-		double p1 = 1.0;
+//		double p1 = 1.0;
+		double p1 = 2.45;
 		
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 1.0/16, q = 16)
-		double p2 = 1.0;
+//		double p2 = 1.0;
+		double p2 = .615;
 		
 		@DoNotDetectChanges
 		@GadgetDoubleLogarithmic(p = 1.0/16, q = 16)

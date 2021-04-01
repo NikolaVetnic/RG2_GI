@@ -13,6 +13,7 @@ import graphics3d.Solid;
 import graphics3d.Texture;
 import graphics3d.Transform;
 import graphics3d.Vec3;
+import graphics3d.solids.Ball;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.voxelworld.BruteForce;
 import graphics3d.solids.voxelworld.DirArray;
@@ -33,25 +34,29 @@ public class VoxelWorld_SC01 extends SceneBase {
 	public static class Factory implements Function1<Scene, Double> {
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double px = -0.375;
+//		double px = -0.25;
+		double px = -0.175;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double py = -0.375;
+//		double py = 0.125;
+		double py = -0.405;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-		double pz = 0.0;
+//		double pz = 0.0;
+		double pz = -0.05;
 
-		@GadgetDouble(p = -5, q = 5)
-		double dx = 0.0;
+		@GadgetDouble(p = -50, q = 50)
+		double dx = -17.5;
 		
-		@GadgetDouble(p = -5, q = 5)
+		@GadgetDouble(p = -50, q = 50)
 		double dy = 0.0;
 		
-		@GadgetDouble(p = -5, q = 5)
-		double dz = 0.0;
+		@GadgetDouble(p = -50, q = 50)
+		double dz = -50.0;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = .0325;
+//		double s = .015;
+		double s = .125;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -112,14 +117,16 @@ public class VoxelWorld_SC01 extends SceneBase {
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
-		.andThen(Transform.scaling			(s + 0.0))))));;
+		.andThen(Transform.scaling			(s + 0.0))))));
 		
 		// test object 02 : voxel set
 		
-		OptDirArrayM vw = OptDirArrayM.set("img/voxel_set_02/room_000.bmp");
+//		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_02/room_000.bmp");
+//		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_03/shrine_000.bmp");
+		GridMarch2Opt vw = GridMarch2Opt.map("img/mars-test.jpg");
 		
 		Solid obj02 = vw.transformed(
-				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
+				 Transform.translation		(Vec3.xyz(dx, dy, dz - 12.5).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
@@ -133,20 +140,21 @@ public class VoxelWorld_SC01 extends SceneBase {
 		Material mDiffuseG 	= new Material(BSDF.diffuse(Color.hsb(120, 0.7, 0.8)));
 		Material mDiffuseB 	= new Material(BSDF.diffuse(Color.hsb(240, 0.7, 0.8)));
 		Material mDiffuseP 	= new Material(BSDF.diffuse(Color.hsb(270, 0.4, 0.8)));
+		Material mDiffuseK 	= new Material(BSDF.diffuse(Color.hsb(  0, 0.0, 0.0)));
 		
 		Material mLight = Material.light(Color.hsb(0, 0.5, 120.0));
 		
 		bodies.addAll(List.of(
-				Body.uniform(HalfSpace.pn(Vec3.xyz(-5, 0, 0), Vec3.xyz( 5, 0, 0)), mDiffuseG	 ),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-5, 0, 0)), mDiffuseG	 ),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseR	 ),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 5, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT),
-				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 5), Vec3.xyz( 0, 0,-1)), mDiffuseY	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz(-5, 0, 0), Vec3.xyz( 5, 0, 0)), mDiffuseG	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz( 5, 0, 0), Vec3.xyz(-5, 0, 0)), mDiffuseG	 ),
+//				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,-5, 0), Vec3.xyz( 0, 1, 0)), mDiffuseR	 ),
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,25, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT), 
+				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0,25), Vec3.xyz( 0, 0,-1)), mDiffuseK	 ),
 				
 //				Body.uniform(vw, mDiffuseY)
-//				Body.v(obj02, vw.model())
+				Body.v(obj02, vw.model())
 //				Body.uniform(obj01, mDiffuseR)
-				Body.v(obj01, rv)
+//				Body.v(obj01, rv)
 		));
 		
 		cameraTransform = Transform.IDENTITY
