@@ -22,6 +22,7 @@ import graphics3d.solids.voxelworld.GridMarch2;
 import graphics3d.solids.voxelworld.GridMarch2Opt;
 import graphics3d.solids.voxelworld.OptDirArray;
 import graphics3d.solids.voxelworld.OptDirArrayM;
+import graphics3d.solids.voxelworld.VoxOctree;
 import graphics3d.textures.Grid;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
@@ -34,29 +35,25 @@ public class VoxelWorld_SC01 extends SceneBase {
 	public static class Factory implements Function1<Scene, Double> {
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-//		double px = -0.25;
-		double px = -0.175;
+		double px = 0.0;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-//		double py = 0.125;
-		double py = -0.405;
+		double py = 0.0;
 		
 		@GadgetDouble(p = -.5, q = 0.5)
-//		double pz = 0.0;
-		double pz = -0.05;
+		double pz = 0.0;
 
 		@GadgetDouble(p = -50, q = 50)
-		double dx = -17.5;
+		double dx = 0.0;
 		
 		@GadgetDouble(p = -50, q = 50)
 		double dy = 0.0;
 		
 		@GadgetDouble(p = -50, q = 50)
-		double dz = -50.0;
+		double dz = -1.5;
 
 		@GadgetDouble(p = 0, q = 5.0)
-//		double s = .015;
-		double s = .125;
+		double s = 0.5;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -103,7 +100,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 		
 		// test object 01 : random voxel array 
 		
-		Vec3 dim = Vec3.xyz(150, 150, 150);
+		Vec3 dim = Vec3.xyz(20, 20, 20);
 		
 		Color[][][] rv = new Color[dim.xInt()][dim.yInt()][dim.zInt()];
 		
@@ -119,18 +116,42 @@ public class VoxelWorld_SC01 extends SceneBase {
 		.andThen(Transform.rotationAboutZ	(pz)
 		.andThen(Transform.scaling			(s + 0.0))))));
 		
-		// test object 02 : voxel set
+		boolean[][][] bv = new boolean[dim.xInt()][dim.yInt()][dim.zInt()];
 		
-//		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_02/room_000.bmp");
-//		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_03/shrine_000.bmp");
-		GridMarch2Opt vw = GridMarch2Opt.map("img/mars-test.jpg");
+		for (int i = 0; i < dim.xInt(); i++) 
+			for (int j = 0; j < dim.yInt(); j++) 
+				for (int k = 0; k < dim.zInt(); k++)
+					bv[i][j][k] = rng.nextDouble() < 0.025;
 		
-		Solid obj02 = vw.transformed(
-				 Transform.translation		(Vec3.xyz(dx, dy, dz - 12.5).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
+		Solid obj03 = VoxOctree.arr(bv).transformed(
+				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 		.andThen(Transform.rotationAboutX	(px)
 		.andThen(Transform.rotationAboutY	(py)
 		.andThen(Transform.rotationAboutZ	(pz)
-		.andThen(Transform.scaling			(s))))));;
+		.andThen(Transform.scaling			(s + 0.0))))));
+		
+		// test object 02 : voxel set
+		
+//		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_02/room_000.bmp");
+		GridMarch2Opt vw = GridMarch2Opt.set("img/voxel_set_03/shrine_000.bmp");
+//		GridMarch2Opt vw = GridMarch2Opt.map("img/mars-test.jpg");
+		
+//		Solid obj02 = vw.transformed(
+//				 Transform.translation		(Vec3.xyz(dx, dy, dz - 12.5).sub(Vec3.xyz(20, 20, 14).mul(0.5)))
+//		.andThen(Transform.rotationAboutX	(px)
+//		.andThen(Transform.rotationAboutY	(py)
+//		.andThen(Transform.rotationAboutZ	(pz)
+//		.andThen(Transform.scaling			(s))))));
+		
+		Transform transform = Transform.IDENTITY
+				.andThen(Transform.scaling(10 * s / vw.len().max()))
+				.andThen(Transform.translation(Vec3.EXYZ.div(-2.0).add(Vec3.xyz(dx, dy, dz))))
+				.andThen(Transform.rotationAboutX(px - 0.25))
+				.andThen(Transform.rotationAboutY(py + .125))
+				.andThen(Transform.rotationAboutZ(pz + 0.00));
+		
+		Solid obj02 = vw.transformed(transform);
+//		Solid obj01 = GridMarch2Opt.arr(rv).transformed(transform);
 		
 		Material mGlass 	= new Material(BSDF.glossyRefractive(Color.hsb(210, 0.2, 0.9), 1.4, s));
 		Material mFloor 	= new Material(BSDF.glossy(Color.hsb(  0, 0.0, 0.7), 0.4));
@@ -152,9 +173,10 @@ public class VoxelWorld_SC01 extends SceneBase {
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0,25), Vec3.xyz( 0, 0,-1)), mDiffuseK	 ),
 				
 //				Body.uniform(vw, mDiffuseY)
-				Body.v(obj02, vw.model())
+//				Body.v(obj02, vw.model())
 //				Body.uniform(obj01, mDiffuseR)
 //				Body.v(obj01, rv)
+				Body.uniform(obj03)
 		));
 		
 		cameraTransform = Transform.IDENTITY

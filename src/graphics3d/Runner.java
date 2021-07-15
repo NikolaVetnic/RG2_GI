@@ -108,6 +108,7 @@ public class Runner implements Drawing {
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestQuadrics.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestMesh.Factory();
 	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_SC01.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_Shrine.Factory();
 	
 	
 	Renderer renderer;

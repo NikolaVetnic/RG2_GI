@@ -20,7 +20,7 @@ abstract class Base implements Solid {
 	}
 	
 	
-	protected Vec3 len()	{ return len; 			}
+	public Vec3 len()		{ return len; 			}
 	
 	
 	protected int lenX()	{ return len.xInt();	}
