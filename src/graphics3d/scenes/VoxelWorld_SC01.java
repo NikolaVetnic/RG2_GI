@@ -116,19 +116,19 @@ public class VoxelWorld_SC01 extends SceneBase {
 		.andThen(Transform.rotationAboutZ	(pz)
 		.andThen(Transform.scaling			(s + 0.0))))));
 		
-		boolean[][][] bv = new boolean[dim.xInt()][dim.yInt()][dim.zInt()];
-		
-		for (int i = 0; i < dim.xInt(); i++) 
-			for (int j = 0; j < dim.yInt(); j++) 
-				for (int k = 0; k < dim.zInt(); k++)
-					bv[i][j][k] = rng.nextDouble() < 0.025;
-		
-		Solid obj03 = VoxOctree.arr(bv).transformed(
-				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
-		.andThen(Transform.rotationAboutX	(px)
-		.andThen(Transform.rotationAboutY	(py)
-		.andThen(Transform.rotationAboutZ	(pz)
-		.andThen(Transform.scaling			(s + 0.0))))));
+//		boolean[][][] bv = new boolean[dim.xInt()][dim.yInt()][dim.zInt()];
+//
+//		for (int i = 0; i < dim.xInt(); i++)
+//			for (int j = 0; j < dim.yInt(); j++)
+//				for (int k = 0; k < dim.zInt(); k++)
+//					bv[i][j][k] = rng.nextDouble() < 0.025;
+//
+//		Solid obj03 = VoxOctree.arr(bv).transformed(
+//				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
+//		.andThen(Transform.rotationAboutX	(px)
+//		.andThen(Transform.rotationAboutY	(py)
+//		.andThen(Transform.rotationAboutZ	(pz)
+//		.andThen(Transform.scaling			(s + 0.0))))));
 		
 		// test object 02 : voxel set
 		
@@ -175,8 +175,8 @@ public class VoxelWorld_SC01 extends SceneBase {
 //				Body.uniform(vw, mDiffuseY)
 //				Body.v(obj02, vw.model())
 //				Body.uniform(obj01, mDiffuseR)
-//				Body.v(obj01, rv)
-				Body.uniform(obj03)
+				Body.v(obj01, rv)
+//				Body.uniform(obj03)
 		));
 		
 		cameraTransform = Transform.IDENTITY

@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 
 public class Runner implements Drawing {
 	
-	static final Vector imageSize = Vector.xy(1080, 1080);
+	static final Vector imageSize = Vector.xy(640, 640);
 	static final PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
 	static final int PARALLELISM = ForkJoinPool.getCommonPoolParallelism();
 	
@@ -107,7 +107,8 @@ public class Runner implements Drawing {
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestImageTextures.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestQuadrics.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestMesh.Factory();
-	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_SC01.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_SC01.Factory();
+	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_SC02.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_Shrine.Factory();
 	
 	

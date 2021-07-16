@@ -54,7 +54,7 @@ abstract class Base implements Solid {
 	
 	
 	protected static Hit[] getHits(Vec3 p, Vec3 d, Ray ray) {
-		return Box.$.pd(p, d).hits(ray);
+			return Box.$.pd(p, d).hits(ray);
 	}
 	
 	
