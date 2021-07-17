@@ -10,24 +10,13 @@ import graphics3d.Color;
 import graphics3d.Material;
 import graphics3d.Scene;
 import graphics3d.Solid;
-import graphics3d.Texture;
 import graphics3d.Transform;
 import graphics3d.Vec3;
-import graphics3d.solids.Ball;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.BruteForce;
-import graphics3d.solids.voxelworld.DirArray;
-import graphics3d.solids.voxelworld.GridMarch1;
-import graphics3d.solids.voxelworld.GridMarch2;
 import graphics3d.solids.voxelworld.GridMarch2Opt;
-import graphics3d.solids.voxelworld.OptDirArray;
-import graphics3d.solids.voxelworld.OptDirArrayM;
-import graphics3d.solids.voxelworld.VoxOctree;
-import graphics3d.textures.Grid;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
-import mars.geometry.Vector;
 import mars.utils.Numeric;
 
 public class VoxelWorld_SC01 extends SceneBase {
@@ -123,7 +112,7 @@ public class VoxelWorld_SC01 extends SceneBase {
 //				for (int k = 0; k < dim.zInt(); k++)
 //					bv[i][j][k] = rng.nextDouble() < 0.025;
 //
-//		Solid obj03 = VoxOctree.arr(bv).transformed(
+//		Solid obj03 = VoxOctree1.arr(bv).transformed(
 //				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
 //		.andThen(Transform.rotationAboutX	(px)
 //		.andThen(Transform.rotationAboutY	(py)

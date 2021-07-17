@@ -2,7 +2,7 @@ package graphics3d.scenes;
 
 import graphics3d.*;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.VoxOctree;
+import graphics3d.solids.voxelworld.VoxOctree1;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -75,11 +75,9 @@ public class VoxelWorld_SC02 extends SceneBase {
 			double 	dx, 	double 	dy, 		double 	dz, 
 			double 	s, 		double 	z) throws IOException {
 		
-		colorBackground = Color.WHITE;
-		
 		Random rng = new Random(seed);
 
-		int lvl = 2;
+		int lvl = 4;
 
 		Vec3 dim = Vec3.xyz(Math.pow(2, lvl), Math.pow(2, lvl), Math.pow(2, lvl));
 
@@ -88,19 +86,18 @@ public class VoxelWorld_SC02 extends SceneBase {
 		for (int i = 0; i < dim.xInt(); i++)
 			for (int j = 0; j < dim.yInt(); j++)
 				for (int k = 0; k < dim.zInt(); k++)
-//					rv[i][j][k] = rng.nextDouble() < 0.25;
-					rv[i][j][k] = i == j && j == k;
+					rv[i][j][k] = rng.nextDouble() < 0.0625;	// test model, random voxels
+//					rv[i][j][k] = i == j && j == k;				// test model, cube diagonal
 
-		VoxOctree vo = VoxOctree.arr(rv);
+		VoxOctree1 vo = VoxOctree1.arr(rv);
 
 		Solid solid = vo
-//		.transformed(
-//				 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(1.0)))
-//		.andThen(Transform.rotationAboutX	(px)
-//		.andThen(Transform.rotationAboutY	(py)
-//		.andThen(Transform.rotationAboutZ	(pz)
-//		.andThen(Transform.scaling			(s + 0.0))))))
-		;
+				.transformed(
+						 Transform.translation		(Vec3.xyz(dx, dy, dz).sub(dim.mul(0.5)))
+				.andThen(Transform.rotationAboutX	(px)
+				.andThen(Transform.rotationAboutY	(py)
+				.andThen(Transform.rotationAboutZ	(pz)
+				.andThen(Transform.scaling			(s + 0.0))))));
 
 		Material mDiffuseY 	= new Material(BSDF.diffuse(Color.hsb( 60, 0.7, 0.8)));
 		Material mDiffuseK 	= new Material(BSDF.diffuse(Color.hsb(  0, 0.0, 0.0)));
