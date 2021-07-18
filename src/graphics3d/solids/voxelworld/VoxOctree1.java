@@ -1,9 +1,6 @@
 package graphics3d.solids.voxelworld;
 
-import graphics3d.Hit;
-import graphics3d.Ray;
-import graphics3d.Solid;
-import graphics3d.Vec3;
+import graphics3d.*;
 import graphics3d.solids.Box;
 
 import java.util.*;
@@ -20,17 +17,13 @@ public class VoxOctree1 implements Solid {
 	 *******************************************************************/
 	
 	
-	Octree octree;
-	
-	
-	private VoxOctree1(Octree octree) {
-		this.octree = octree;
-	}
-	
-	
-	public static VoxOctree1 arr(boolean[][][] arr) {
-		return new VoxOctree1(Octree.fromModel(arr));
-	}
+	private Octree octree;
+
+
+	private VoxOctree1(Octree octree) 							{ this.octree = octree; }
+
+
+	public static VoxOctree1 arr(boolean[][][] arr) 			{ return new VoxOctree1(Octree.fromModel(arr)); 		}
 
 
 	@Override
@@ -46,7 +39,7 @@ public class VoxOctree1 implements Solid {
 
 		for (int l = b.length - 1; l > 0; l--) {		// uses current and subsequent tree level, hence > 0
 
-			int unit = (int) Math.pow(2, l - 1);		// unit size for current tree level
+			int unit = 1 << (l - 1);					// unit size for current tree level, same as Math.pow(2, l - 1)
 			Vec3 unitVec3 = Vec3.EXYZ.mul(unit);
 
 			for (Vec3 v : l0) {							// check all boxes hit in the previous iteration
@@ -60,7 +53,7 @@ public class VoxOctree1 implements Solid {
 
 					Hit[] hits = Box.$.pd(p, unitVec3).hits(ray);
 														// current box of unitVec3 size - ray intersection
-					if (isPopulated(l - 1, currPos) && hits.length > 0)
+					if (isPopulated(l - 1, currPos) && hits.length > 0 && hits[0].t() > afterTime)
 						l1.add(currPos);				// if box is hit and populated it is carried over
 				}
 			}
@@ -75,15 +68,23 @@ public class VoxOctree1 implements Solid {
 		 * en was to find all hits, sort them and return the first one, al-
 		 * so to, as a secondary check, see if hits[1].t() > afterTime - v-
 		 * isally all approaches yield same results so I opted for returni-
-		 * ng the first one as it is the fastest one.
+		 * ng the first one as it is the fastest one. UPDATE: returning the
+		 * first one was wrong, but produced a cool bug.
 		 */
+
+		List<Hit> hitList = new ArrayList<>();
 
 		for (Vec3 v : l0) {
 
-			Hit[] hits = Box.$.pd(v, Vec3.EXYZ).hits(ray);
+			Hit hit = Box.$.pd(v, Vec3.EXYZ).firstHit(ray, afterTime);
 														// current voxel of (1, 1, 1) size - ray intersection
-			if (hits.length > 0 && hits[0].t() > afterTime)
-					return hits[0];
+			if (hit != Hit.POSITIVE_INFINITY && hit.t() > afterTime)
+				hitList.add(hit);
+		}
+
+		if (!hitList.isEmpty()) {
+			hitList.sort(Comparator.comparingDouble(Hit::t));
+			return hitList.get(0);
 		}
 
 		return Hit.POSITIVE_INFINITY;

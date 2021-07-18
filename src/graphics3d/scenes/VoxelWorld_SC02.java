@@ -3,6 +3,7 @@ package graphics3d.scenes;
 import graphics3d.*;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.voxelworld.VoxOctree1;
+import graphics3d.solids.voxelworld.VoxOctree2;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -35,7 +36,7 @@ public class VoxelWorld_SC02 extends SceneBase {
 		double dz = -1.5;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.25;
+		double s = 0.025;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -86,10 +87,11 @@ public class VoxelWorld_SC02 extends SceneBase {
 		for (int i = 0; i < dim.xInt(); i++)
 			for (int j = 0; j < dim.yInt(); j++)
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.0625;	// test model, random voxels
+					rv[i][j][k] = rng.nextDouble() < 0.0025;	// test model, random voxels
 //					rv[i][j][k] = i == j && j == k;				// test model, cube diagonal
 
 		VoxOctree1 vo = VoxOctree1.arr(rv);
+//		VoxOctree2 vo = VoxOctree2.arr(rv);
 
 		Solid solid = vo
 				.transformed(
