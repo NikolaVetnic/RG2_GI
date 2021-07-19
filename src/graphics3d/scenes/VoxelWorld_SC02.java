@@ -1,17 +1,23 @@
 package graphics3d.scenes;
 
-import graphics3d.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+
+import graphics3d.BSDF;
+import graphics3d.Body;
+import graphics3d.Color;
+import graphics3d.Material;
+import graphics3d.Scene;
+import graphics3d.Solid;
+import graphics3d.Transform;
+import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.VoxOctree1;
-import graphics3d.solids.voxelworld.VoxOctree2;
+import graphics3d.solids.voxelworld.VoxOctree2_1;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
 import mars.utils.Numeric;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Random;
 
 public class VoxelWorld_SC02 extends SceneBase {
 
@@ -78,7 +84,7 @@ public class VoxelWorld_SC02 extends SceneBase {
 		
 		Random rng = new Random(seed);
 
-		int lvl = 4;
+		int lvl = 6;
 
 		Vec3 dim = Vec3.xyz(Math.pow(2, lvl), Math.pow(2, lvl), Math.pow(2, lvl));
 
@@ -87,11 +93,12 @@ public class VoxelWorld_SC02 extends SceneBase {
 		for (int i = 0; i < dim.xInt(); i++)
 			for (int j = 0; j < dim.yInt(); j++)
 				for (int k = 0; k < dim.zInt(); k++)
-					rv[i][j][k] = rng.nextDouble() < 0.0025;	// test model, random voxels
+					rv[i][j][k] = rng.nextDouble() < 0.125;	// test model, random voxels
 //					rv[i][j][k] = i == j && j == k;				// test model, cube diagonal
 
-		VoxOctree1 vo = VoxOctree1.arr(rv);
+//		VoxOctree1 vo = VoxOctree1.arr(rv);
 //		VoxOctree2 vo = VoxOctree2.arr(rv);
+		VoxOctree2_1 vo = VoxOctree2_1.arr(rv);
 
 		Solid solid = vo
 				.transformed(
