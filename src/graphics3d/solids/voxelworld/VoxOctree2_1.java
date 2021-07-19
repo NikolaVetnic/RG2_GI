@@ -67,12 +67,19 @@ public class VoxOctree2_1 implements Solid {
 
 					if (isPopulated(lvl - 1, currPos)) {
 														// current box of unitVec3 size - ray intersection
-						Hit[] hits = Box.$.pd(p, unitVec3).hits(ray);
+//						Hit[] hits = Box.$.pd(p, unitVec3).hits(ray);
+						Hit hhits = Box.$.pd(p, unitVec3).firstHit(ray, afterTime); // <- izbeci ovo
 
-						if (hits.length > 0 && hits[0].t() > afterTime)
-							if (lvl > 1)				// if there are more layers, go deeper
-								return octreeDFS(currPos, lvl - 1, ray, afterTime);
-							else						// if curr layer is penultimate, we have a hit
+						// odrzavati vremena kada sece xyz ravni za te kocke
+						// kao parametar dva suprotna ugla kocke
+						// izracunati centar kocke
+
+						if (hhits != Hit.POSITIVE_INFINITY)
+//						if (hits.length > 0 && hits[0].t() > afterTime)
+							if (lvl > 1) {                // if there are more layers, go deeper
+								Vec3 pp = octreeDFS(currPos, lvl - 1, ray, afterTime);
+								if (pp != null) return pp;
+							} else						// if curr layer is penultimate, we have a hit
 								return currPos;
 					}
 				}
