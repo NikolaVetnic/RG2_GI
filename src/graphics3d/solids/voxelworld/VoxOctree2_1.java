@@ -6,9 +6,6 @@ import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class VoxOctree2_1 implements Solid {
 
 
@@ -24,13 +21,13 @@ public class VoxOctree2_1 implements Solid {
 	private Octree octree;
 
 
-	private VoxOctree2_1(Octree octree) 							{ this.octree = octree; }
+	private VoxOctree2_1(Octree octree) 						{ this.octree = octree; }
 
 
 	public static VoxOctree2_1 arr(boolean[][][] arr) 			{ return new VoxOctree2_1(Octree.fromModel(arr)); 	}
 
 
-	private Vec3 octreeDFS(Vec3 curr, int lvl, Ray ray, double afterTime) {
+	private Hit octreeDFS(Vec3 curr, int lvl, Ray ray, double afterTime) {
 
 		int unit = 1 << (lvl - 1);						// unit size for current tree level, same as Math.pow(2, l - 1)
 		Vec3 unitVec3 = Vec3.EXYZ.mul(unit);
@@ -67,49 +64,31 @@ public class VoxOctree2_1 implements Solid {
 
 					if (isPopulated(lvl - 1, currPos)) {
 														// current box of unitVec3 size - ray intersection
-//						Hit[] hits = Box.$.pd(p, unitVec3).hits(ray);
-						Hit hhits = Box.$.pd(p, unitVec3).firstHit(ray, afterTime); // <- izbeci ovo
+						Hit hit = Box.$.pd(p, unitVec3).firstHit(ray, afterTime);
 
-						// odrzavati vremena kada sece xyz ravni za te kocke
-						// kao parametar dva suprotna ugla kocke
-						// izracunati centar kocke
-
-						if (hhits != Hit.POSITIVE_INFINITY)
-//						if (hits.length > 0 && hits[0].t() > afterTime)
-							if (lvl > 1) {                // if there are more layers, go deeper
-								Vec3 pp = octreeDFS(currPos, lvl - 1, ray, afterTime);
-								if (pp != null) return pp;
-							} else						// if curr layer is penultimate, we have a hit
-								return currPos;
+						if (hit != Hit.POSITIVE_INFINITY) {
+							if (lvl > 1) {				// if there are more layers, go deeper and return if hit
+								Hit pp = octreeDFS(currPos, lvl - 1, ray, afterTime);
+								if (pp != Hit.POSITIVE_INFINITY) return pp;
+							} else {					// if this is the last layer there is a hit
+								return hit;
+							}
+						}
 					}
 				}
 			}
 		}
 		
-		return null;
+		return Hit.POSITIVE_INFINITY;
 	}
 
 
 	@Override
 	public Hit firstHit(Ray ray, double afterTime) {
 
-//		List<Vec3> container = new ArrayList<>();
-
-		Vec3 currPos = octreeDFS(Vec3.ZERO, octree.data().length - 1, ray, afterTime);
-
-//		if (container.isEmpty())
-//			return Hit.POSITIVE_INFINITY;
-		
-		if (currPos == null)
-			return Hit.POSITIVE_INFINITY;
-
-		Hit h = Box.$.pd(currPos, Vec3.EXYZ).firstHit(ray, afterTime);
-
-		if (h != Hit.POSITIVE_INFINITY && h.t() > afterTime)
-			return h;
-
-		return Hit.POSITIVE_INFINITY;
+		return octreeDFS(Vec3.ZERO, octree.data().length - 1, ray, afterTime);
 	}
+	
 
 	private boolean isPopulated(int l, Vec3 ijk) {
 		return octree.data()[l][ijk.xInt()][ijk.yInt()][ijk.zInt()];

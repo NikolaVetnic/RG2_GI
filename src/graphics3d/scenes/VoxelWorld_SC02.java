@@ -13,7 +13,7 @@ import graphics3d.Solid;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.VoxOctree2_1;
+import graphics3d.solids.voxelworld.VoxOctree2;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -42,7 +42,7 @@ public class VoxelWorld_SC02 extends SceneBase {
 		double dz = -1.5;
 
 		@GadgetDouble(p = 0, q = 5.0)
-		double s = 0.025;
+		double s = 0.075;
 
 		@GadgetInteger(min = 0, max = 7)
 		int xInt = 0;
@@ -97,8 +97,8 @@ public class VoxelWorld_SC02 extends SceneBase {
 //					rv[i][j][k] = i == j && j == k;				// test model, cube diagonal
 
 //		VoxOctree1 vo = VoxOctree1.arr(rv);
-//		VoxOctree2 vo = VoxOctree2.arr(rv);
-		VoxOctree2_1 vo = VoxOctree2_1.arr(rv);
+		VoxOctree2 vo = VoxOctree2.arr(rv);
+//		VoxOctree2_1 vo = VoxOctree2_1.arr(rv);
 
 		Solid solid = vo
 				.transformed(

@@ -30,7 +30,24 @@ public class VoxOctree2 implements Solid {
 	public static VoxOctree2 arr(boolean[][][] arr) 			{ return new VoxOctree2(Octree.fromModel(arr)); 	}
 
 
-	private void octreeDFS(List<Vec3> container, Vec3 curr, int lvl, Ray ray, double afterTime) {
+	@Override
+	public Hit firstHit(Ray ray, double afterTime) {
+
+		List<Hit> container = new ArrayList<>();
+
+		octreeDFS(container, Vec3.ZERO, octree.data().length - 1, ray, afterTime);
+
+		if (container.isEmpty())
+			return Hit.POSITIVE_INFINITY;
+
+		if (container.get(0) != Hit.POSITIVE_INFINITY && container.get(0).t() > afterTime)
+			return container.get(0);
+
+		return Hit.POSITIVE_INFINITY;
+	}
+
+
+	private void octreeDFS(List<Hit> container, Vec3 curr, int lvl, Ray ray, double afterTime) {
 
 		int unit = 1 << (lvl - 1);						// unit size for current tree level, same as Math.pow(2, l - 1)
 		Vec3 unitVec3 = Vec3.EXYZ.mul(unit);
@@ -67,37 +84,19 @@ public class VoxOctree2 implements Solid {
 
 					if (isPopulated(lvl - 1, currPos)) {
 														// current box of unitVec3 size - ray intersection
-						Hit[] hits = Box.$.pd(p, unitVec3).hits(ray);
+						Hit hit = Box.$.pd(p, unitVec3).firstHit(ray, afterTime);
 
-						if (hits.length > 0 && hits[0].t() > afterTime)
+						if (hit != Hit.POSITIVE_INFINITY)
 							if (lvl > 1)				// if there are more layers, go deeper
 								octreeDFS(container, currPos, lvl - 1, ray, afterTime);
 							else						// if curr layer is penultimate, we have a hit
-								container.add(currPos);
+								container.add(hit);
 					}
 				}
 			}
 		}
 	}
-
-
-	@Override
-	public Hit firstHit(Ray ray, double afterTime) {
-
-		List<Vec3> container = new ArrayList<>();
-
-		octreeDFS(container, Vec3.ZERO, octree.data().length - 1, ray, afterTime);
-
-		if (container.isEmpty())
-			return Hit.POSITIVE_INFINITY;
-
-		Hit h = Box.$.pd(container.get(0), Vec3.EXYZ).firstHit(ray, afterTime);
-
-		if (h != Hit.POSITIVE_INFINITY && h.t() > afterTime)
-			return h;
-
-		return Hit.POSITIVE_INFINITY;
-	}
+	
 
 	private boolean isPopulated(int l, Vec3 ijk) {
 		return octree.data()[l][ijk.xInt()][ijk.yInt()][ijk.zInt()];

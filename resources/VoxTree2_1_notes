@@ -1,0 +1,5 @@
+Hit hhits = Box.$.pd(p, unitVec3).firstHit(ray, afterTime); // <- izbeci ovo
+
+						// odrzavati vremena kada sece xyz ravni za te kocke
+						// kao parametar dva suprotna ugla kocke
+						// izracunati centar kocke
