@@ -187,14 +187,4 @@ public class Util {
 		
 		return new Vec3[] { v0.add(u0), v1.add(u1.add(vx)), vx };
 	}
-	
-	
-//	public static void main(String[] args) {
-//		
-//		pack(Vec3.xyz(1234, 2345, 3456));
-//		System.out.println(unpack(pack(Vec3.xyz(1234, 2345, 3456))));
-//		
-//		System.out.println(splitToNumber(3456, 4, 4));
-//		System.out.println(split(3456, 4));
-//	}
 }

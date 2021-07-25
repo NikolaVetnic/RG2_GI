@@ -1,53 +1,57 @@
 package graphics3d.solids.voxelworld;
 
+import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoxOctree2 implements Solid {
+public class OctreeRec extends Base {
 
 
 	/********************************************************************
 	 * 																	*
-	 * ID : 0x															*
+	 * ID : 08															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
-
-
-	private Octree octree;
-
-
-	private VoxOctree2(Octree octree) 							{ this.octree = octree; }
-
-
-	public static VoxOctree2 arr(boolean[][][] arr) 			{ return new VoxOctree2(Octree.fromModel(arr)); 	}
+	
+	
+	protected OctreeRec(boolean[][][] arr0) 					{ super(Octree.fromModel(arr0).data()); 		}
+	protected OctreeRec(boolean[][][] arr0, Color[][][] arr1) 	{ super(Octree.fromModel(arr0).data(), arr1); 	}
+	protected OctreeRec(ModelData data) 						{ super(data); 									}
+	
+	
+	public static OctreeRec model(boolean[][][] arr0)						{ return new OctreeRec(arr0); 							}
+	public static OctreeRec model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeRec(arr0, arr1); 					}
+	public static OctreeRec set(String baseLayerPath) throws IOException 	{ return new OctreeRec(Loaders.set(baseLayerPath)); 	}
+	public static OctreeRec line(Vec3 p, Vec3 q, Color c) 					{ return new OctreeRec(Loaders.line(p, q, c)); 		}
 
 
 	@Override
 	public Hit firstHit(Ray ray, double afterTime) {
 
-		List<Hit> container = new ArrayList<>();
+		List<Vec3Hit> container = new ArrayList<>();
 
-		octreeDFS(container, Vec3.ZERO, octree.data().length - 1, ray, afterTime);
+		octreeDFS(container, Vec3.ZERO, model().length - 1, ray, afterTime);
 
 		if (container.isEmpty())
 			return Hit.POSITIVE_INFINITY;
 
 		if (container.get(0) != Hit.POSITIVE_INFINITY && container.get(0).t() > afterTime)
-			return container.get(0);
+			return new HitVoxel(ray, container.get(0).h(), container.get(0).v());
 
 		return Hit.POSITIVE_INFINITY;
 	}
 
 
-	private void octreeDFS(List<Hit> container, Vec3 curr, int lvl, Ray ray, double afterTime) {
+	private void octreeDFS(List<Vec3Hit> container, Vec3 curr, int lvl, Ray ray, double afterTime) {
 
 		int unit = 1 << (lvl - 1);						// unit size for current tree level, same as Math.pow(2, l - 1)
 		Vec3 unitVec3 = Vec3.EXYZ.mul(unit);
@@ -90,16 +94,11 @@ public class VoxOctree2 implements Solid {
 							if (lvl > 1)				// if there are more layers, go deeper
 								octreeDFS(container, currPos, lvl - 1, ray, afterTime);
 							else						// if curr layer is penultimate, we have a hit
-								container.add(hit);
+								container.add(new Vec3Hit(currPos, hit));
 					}
 				}
 			}
 		}
-	}
-	
-
-	private boolean isPopulated(int l, Vec3 ijk) {
-		return octree.data()[l][ijk.xInt()][ijk.yInt()][ijk.zInt()];
 	}
 
 

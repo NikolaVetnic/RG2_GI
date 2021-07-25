@@ -7,16 +7,74 @@ import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
 
-abstract class Base implements Solid {
+public abstract class Base implements Solid {
 	
 	
-	protected Color[][][] model;
+	protected class Vec3Hit {
+		
+		/*
+		 * A simple wrapper class used to pair up hits and associated vect-
+		 * ors for easier retreival of material information from the model.
+		 */
+		
+		private Vec3 v;
+		private Hit h;
+		
+		public Vec3Hit(Vec3 v, Hit h) {
+			this.v = v;
+			this.h = h;
+		}
+		
+		public Hit h() {
+			return h;
+		}
+		
+		public double t() {
+			return h.t();
+		}
+		
+		public Vec3 v() {
+			return v;
+		}
+	}
+	
+	
+	protected boolean[][][][] model;					// array is 4d to accomodate for octree boolean[][][][] 
+	protected Color[][][] diffuse;
+	
 	protected Vec3 len;
 	
 	
-	protected Base(graphics3d.Color[][][] model) { 
+	protected Base(boolean[][][][] model) { 			// for use with octrees
 		this.model = model;
 		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
+	}
+	
+	
+	protected Base(boolean[][][][] model, Color[][][] diffuse) { 
+		this.model = model;
+		this.diffuse = diffuse;
+		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
+	}
+	
+	
+	protected Base(boolean[][][] model) {				// all algorithms other than octrees
+		this.model = new boolean[1][][][];
+		this.model[0] = model;
+		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
+	}
+	
+	
+	protected Base(boolean[][][] model, Color[][][] diffuse) {
+		this.model = new boolean[1][][][];
+		this.model[0] = model;
+		this.diffuse = diffuse;
+		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
+	}
+	
+	
+	protected Base(ModelData data) {
+		this(data.model(), data.diffuse());
 	}
 	
 	
@@ -28,13 +86,18 @@ abstract class Base implements Solid {
 	protected int lenZ()	{ return len.zInt();	}
 	
 	
-	protected Color cell(int i, int j, int k) {
-		return model[i][j][k]; 		
+	protected boolean isPopulated(int i, int j, int k) {
+		return model[0][i][j][k]; 		
 	}
 	
 	
-	protected Color cell(Vec3 p) { 
-		return model[p.xInt()][p.yInt()][p.zInt()]; 
+	protected boolean isPopulated(Vec3 p) { 
+		return model[0][p.xInt()][p.yInt()][p.zInt()]; 
+	}
+	
+	
+	protected boolean isPopulated(int l, Vec3 p) { 
+		return model[l][p.xInt()][p.yInt()][p.zInt()]; 
 	}
 	
 	
@@ -43,13 +106,18 @@ abstract class Base implements Solid {
 	}
 	
 
-	public Color[][][] model() {
+	public boolean[][][][] model() {
 		return model;
 	}
 	
 	
-	public Color voxel(int x, int y, int z) {
-		return model[x][y][z];
+	public Color[][][] diffuse() {
+		return diffuse;
+	}
+	
+	
+	public Color color(int x, int y, int z) {
+		return diffuse[x][y][z];
 	}
 	
 	

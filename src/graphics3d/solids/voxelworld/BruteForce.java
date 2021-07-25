@@ -23,27 +23,28 @@ public class BruteForce extends Base {
 	 *******************************************************************/
 
 	
-	protected BruteForce(Color[][][] model) {
-		super(model);
-	}
+	protected BruteForce(boolean[][][] arr0) 					{ super(arr0); 			}
+	protected BruteForce(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
+	protected BruteForce(ModelData data) 						{ super(data); 			}
 	
 	
-	public static BruteForce arr(Color[][][] arr)			{ return new BruteForce(arr); 							}
-	public static BruteForce set(String baseLayerPath) throws IOException 		
-															{ return new BruteForce(Loaders.set(baseLayerPath)); 	}
-	public static BruteForce line(Vec3 p, Vec3 q, Color c) 	{ return new BruteForce(Loaders.line(p, q, c)); 		}
+	public static BruteForce model(boolean[][][] arr0)						{ return new BruteForce(arr0); 							}
+	public static BruteForce model(boolean[][][] arr0, Color[][][] arr1)	{ return new BruteForce(arr0, arr1); 					}
+	public static BruteForce set(String baseLayerPath) throws IOException 	{ return new BruteForce(Loaders.set(baseLayerPath)); 	}
+	public static BruteForce line(Vec3 p, Vec3 q, Color c) 					{ return new BruteForce(Loaders.line(p, q, c)); 		}
 	
 	
 	@Override
 	public Hit firstHit(Ray ray, double afterTime) {
 		
 		Hit out = Hit.POSITIVE_INFINITY;
+		Vec3 v0 = Vec3.ZERO;
 		
 		for (int i = 0; i < lenX(); i++) {
 			for (int j = 0; j < lenY(); j++) {
 				for (int k = 0; k < lenZ(); k++) {
 					
-					if (model[i][j][k] == null) continue;
+					if (!isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
@@ -52,17 +53,19 @@ public class BruteForce extends Base {
 					if (h[0].t() > afterTime) {
 						if (h[0].t() < out.t()) {
 							out = h[0];
+							v0 = Vec3.xyz(i, j, k);
 						}
 					} else if (h[1].t() > afterTime){
 						if (h[1].t() < out.t()) {
 							out = h[1];
+							v0 = Vec3.xyz(i, j, k);
 						}
 					}	
 				}
 			}
 		}
 		
-		return out;
+		return new HitVoxel(ray, out, v0);
 	}
 
 	
@@ -76,7 +79,7 @@ public class BruteForce extends Base {
 			for (int j = 0; j < lenY(); j++) {
 				for (int k = 0; k < lenZ(); k++) {
 					
-					if (model[i][j][k] == null) continue;
+					if (isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					

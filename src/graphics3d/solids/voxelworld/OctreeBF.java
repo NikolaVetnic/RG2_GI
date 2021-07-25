@@ -3,34 +3,37 @@ package graphics3d.solids.voxelworld;
 import graphics3d.*;
 import graphics3d.solids.Box;
 
+import java.io.IOException;
 import java.util.*;
 
-public class VoxOctree1 implements Solid {
+public class OctreeBF extends Base {
 
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 0x															*
+	 * ID : 07															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
 	
 	
-	private Octree octree;
+	protected OctreeBF(boolean[][][] arr0) 						{ super(Octree.fromModel(arr0).data()); 		}
+	protected OctreeBF(boolean[][][] arr0, Color[][][] arr1) 	{ super(Octree.fromModel(arr0).data(), arr1); 	}
+	protected OctreeBF(ModelData data) 							{ super(data); 									}
+	
+	
+	public static OctreeBF model(boolean[][][] arr0)						{ return new OctreeBF(arr0); 							}
+	public static OctreeBF model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeBF(arr0, arr1); 						}
+	public static OctreeBF set(String baseLayerPath) throws IOException 	{ return new OctreeBF(Loaders.set(baseLayerPath)); 	}
+	public static OctreeBF line(Vec3 p, Vec3 q, Color c) 					{ return new OctreeBF(Loaders.line(p, q, c)); 			}
 
 
-	private VoxOctree1(Octree octree) 							{ this.octree = octree; }
-
-
-	public static VoxOctree1 arr(boolean[][][] arr) 			{ return new VoxOctree1(Octree.fromModel(arr)); 		}
-
-
+	
 	@Override
 	public Hit firstHit(Ray ray, double afterTime) {
-
-		Octree o = octree;								// convenience
-		boolean[][][][] b = o.data();
+		
+		boolean[][][][] b = model(); 					// convenience
 
 		List<Vec3> l0 = new ArrayList<>();				// contains hit from previous iteration
 		List<Vec3> l1 = new ArrayList<>();				// hits in current iteration
@@ -72,24 +75,25 @@ public class VoxOctree1 implements Solid {
 		 * first one was wrong, but produced a cool bug.
 		 */
 
-		List<Hit> hitList = new ArrayList<>();
+		List<Vec3Hit> vec3HitList = new ArrayList<>();
 
 		for (Vec3 v : l0) {
 
 			Hit hit = Box.$.pd(v, Vec3.EXYZ).firstHit(ray, afterTime);
 														// current voxel of (1, 1, 1) size - ray intersection
 			if (hit != Hit.POSITIVE_INFINITY && hit.t() > afterTime)
-				hitList.add(hit);
+				vec3HitList.add(new Vec3Hit(v, hit));
 		}
 
-		if (!hitList.isEmpty()) {
-			hitList.sort(Comparator.comparingDouble(Hit::t));
-			return hitList.get(0);
+		if (!vec3HitList.isEmpty()) {
+			vec3HitList.sort(Comparator.comparingDouble(Vec3Hit::t));
+			return new HitVoxel(ray, vec3HitList.get(0).h(), vec3HitList.get(0).v());
 		}
 
 		return Hit.POSITIVE_INFINITY;
 	}
 
+	
 	private Vec3 getVec3FromIndex(int idx) {
 
 		int f = idx & 1;
@@ -99,9 +103,6 @@ public class VoxOctree1 implements Solid {
 		return Vec3.xyz(f, g, h);
 	}
 
-	private boolean isPopulated(int l, Vec3 ijk) {
-		return octree.data()[l][ijk.xInt()][ijk.yInt()][ijk.zInt()];
-	}
 
 	@Override
 	public Hit[] hits(Ray ray) {

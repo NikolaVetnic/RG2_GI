@@ -14,22 +14,22 @@ public class GridMarch1 extends Base {
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 05															*
+	 * ID : 04															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
-
-	
-	protected GridMarch1(Color[][][] model) {
-		super(model);
-	}
 	
 	
-	public static GridMarch1 arr(Color[][][] arr)			{ return new GridMarch1(arr); 						}
-	public static GridMarch1 set(String baseLayerPath) throws IOException 		
-															{ return new GridMarch1(Loaders.set(baseLayerPath)); }
-	public static GridMarch1 line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch1(Loaders.line(p, q, c)); 		}
+	protected GridMarch1(boolean[][][] arr0) 					{ super(arr0); 			}
+	protected GridMarch1(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
+	protected GridMarch1(ModelData data) 						{ super(data); 			}
+	
+	
+	public static GridMarch1 model(boolean[][][] arr0)						{ return new GridMarch1(arr0); 							}
+	public static GridMarch1 model(boolean[][][] arr0, Color[][][] arr1)	{ return new GridMarch1(arr0, arr1); 					}
+	public static GridMarch1 set(String baseLayerPath) throws IOException 	{ return new GridMarch1(Loaders.set(baseLayerPath)); 	}
+	public static GridMarch1 line(Vec3 p, Vec3 q, Color c) 					{ return new GridMarch1(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -66,7 +66,7 @@ public class GridMarch1 extends Base {
 			Vec3 p = Vec3.xyz(xs, ys, zs);
 			Hit[] hits = getHits(p, ray);
 			
-			if (cell(p) != null && hits[0].t() > afterTime)		// if rays hits the voxel AND there is a voxel 
+			if (isPopulated(p) && hits[0].t() > afterTime)				// if rays hits the voxel AND there is a voxel 
 				return new HitVoxel(ray, hits[0], xs, ys, zs);	// there AND it's after afterTime...
 			
 			Hit[][] neighbours = new Hit[3][2];					// ray can intersect no more than three voxels
@@ -122,7 +122,7 @@ public class GridMarch1 extends Base {
 			Vec3 p = Vec3.xyz(xs, ys, zs);
 			Hit[] h = getHits(p, ray);
 			
-			if (cell(p) != null) {
+			if (isPopulated(p)) {
 				if (num > 0) {
 					if (Math.abs(hits[num - 1].t() - h[0].t()) > 1e-8)
 						hits[num++] = new HitVoxel(ray, h[0], xs, ys, zs);

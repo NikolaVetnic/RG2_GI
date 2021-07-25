@@ -10,29 +10,28 @@ import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 
-public class GridMarch2Opt extends Base {
+public class GridMarch2O extends Base {
 	
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 0x															*
+	 * ID : 06															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
 
 	
-	protected GridMarch2Opt(Color[][][] model) {
-		super(model);
-	}
+	protected GridMarch2O(boolean[][][] arr0) 					{ super(arr0); 			}
+	protected GridMarch2O(boolean[][][] arr0, Color[][][] arr1) { super(arr0, arr1); 	}
+	protected GridMarch2O(ModelData data) 						{ super(data); 			}
 	
 	
-	public static GridMarch2Opt arr(Color[][][] arr)			{ return new GridMarch2Opt(arr); 						}
-	public static GridMarch2Opt set(String baseLayerPath) throws IOException 		
-																{ return new GridMarch2Opt(Loaders.set(baseLayerPath)); }
-	public static GridMarch2Opt map(String path) throws IOException
-																{ return new GridMarch2Opt(Loaders.map(path)); 			}
-	public static GridMarch2Opt line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch2Opt(Loaders.line(p, q, c)); 		}
+	public static GridMarch2O model(boolean[][][] arr0)						{ return new GridMarch2O(arr0); 						}
+	public static GridMarch2O model(boolean[][][] arr0, Color[][][] arr1)	{ return new GridMarch2O(arr0, arr1); 					}
+	public static GridMarch2O set(String baseLayerPath) throws IOException 	{ return new GridMarch2O(Loaders.set(baseLayerPath)); 	}
+	public static GridMarch2O map(String baseLayerPath) throws IOException 	{ return new GridMarch2O(Loaders.map(baseLayerPath)); 	}
+	public static GridMarch2O line(Vec3 p, Vec3 q, Color c) 				{ return new GridMarch2O(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -63,7 +62,7 @@ public class GridMarch2Opt extends Base {
 			int k = t.maxIndex();
 			double tMax = t.get(k);
 			
-			if (cell(v0) != null && tMax > afterTime)
+			if (isPopulated(v0) && tMax > afterTime)
 				return new HitVoxel(ray, HitData.tn(tMax, s1.mul(Vec3.E[k])), v0);
 
 			Vec3 tNext = t.add(dt);

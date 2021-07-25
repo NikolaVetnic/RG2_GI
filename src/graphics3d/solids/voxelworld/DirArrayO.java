@@ -9,7 +9,7 @@ import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 
-public class OptDirArray extends Base {
+public class DirArrayO extends Base {
 	
 	
 	/********************************************************************
@@ -25,15 +25,15 @@ public class OptDirArray extends Base {
 	 *******************************************************************/
 
 	
-	protected OptDirArray(Color[][][] model) {
-		super(model);
-	}
+	protected DirArrayO(boolean[][][] arr0) 					{ super(arr0); 			}
+	protected DirArrayO(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
+	protected DirArrayO(ModelData data) 						{ super(data); 			}
 	
 	
-	public static OptDirArray arr(Color[][][] arr)			{ return new OptDirArray(arr); 							}
-	public static OptDirArray set(String baseLayerPath) throws IOException 	
-															{ return new OptDirArray(Loaders.set(baseLayerPath)); 	}
-	public static OptDirArray line(Vec3 p, Vec3 q, Color c) { return new OptDirArray(Loaders.line(p, q, c)); 		}
+	public static DirArrayO model(boolean[][][] arr0)						{ return new DirArrayO(arr0); 							}
+	public static DirArrayO model(boolean[][][] arr0, Color[][][] arr1)		{ return new DirArrayO(arr0, arr1); 					}
+	public static DirArrayO set(String baseLayerPath) throws IOException 	{ return new DirArrayO(Loaders.set(baseLayerPath)); 	}
+	public static DirArrayO line(Vec3 p, Vec3 q, Color c) 					{ return new DirArrayO(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -55,13 +55,14 @@ public class OptDirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 
-					if (model[i][j][k] == null) continue;
+					if (!isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
 					if (h.length == 0) continue;
 					
-					if (h[0].t() > afterTime) return h[0];
+					if (h[0].t() > afterTime)
+						return new HitVoxel(ray, h[0], i, j, k);
 				}
 			}
 		}
@@ -90,7 +91,7 @@ public class OptDirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 
-					if (model[i][j][k] == null) continue;
+					if (isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					

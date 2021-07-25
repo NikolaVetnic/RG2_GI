@@ -13,10 +13,13 @@ import javafx.scene.image.PixelReader;
 public class Loaders {
 	
 	
+	// map, set, line not working as of 20210725 major overhaul - repairs needed
+	
+	
 	private static final int DEFAULT_MAP_HEIGHT = 50;
 	
 	
-	public static Color[][][] map(String path) throws IOException {
+	public static ModelData map(String path) throws IOException {
 		
 		Image image = null;
 		
@@ -30,7 +33,8 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = DEFAULT_MAP_HEIGHT;
 		
-		Color[][][] model = new Color[x][y][z];
+		boolean[][][][] arr0 = new boolean[1][x][y][z];
+		Color[][][] arr1 = new Color[x][y][z];
 		
 		PixelReader pr = image.getPixelReader();
 		
@@ -40,16 +44,18 @@ public class Loaders {
 				javafx.scene.paint.Color c = pr.getColor(i, j);
 				int currZ = (int) (c.getBrightness() * z);
 				
-				for (int k = 0; k < currZ; k++)
-					model[i][j][k] = Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+				for (int k = 0; k < currZ; k++) {
+					arr0[0][i][j][k] = true;
+					arr1[i][j][k] = Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+				}
 			}
 		}
 		
-		return model;
+		return ModelData.arr(arr0, arr1);
 	}
 
 	
-	public static Color[][][] set(String baseLayerPath) throws IOException {
+	public static ModelData set(String baseLayerPath) throws IOException {
 		
 		String setPath = getSetPath(baseLayerPath);
 		String setName = getSetName(baseLayerPath);
@@ -67,7 +73,8 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = new File(setPath).listFiles().length;
 		
-		Color[][][] model = new Color[x][y][z];
+		boolean[][][][] arr0 = new boolean[1][x][y][z];
+		Color[][][] arr1 = new Color[x][y][z];
 		
 		for (int k = 0; k < z; k++) {
 			
@@ -79,13 +86,13 @@ public class Loaders {
 			for (int j = 0; j < y; j++) {
 				for (int i = 0; i < x; i++) {
 					javafx.scene.paint.Color c = pr.getColor(i, j);
-					model[i][j][k] = c.toString().equals("0xffffffff") ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
-//					model[i][j][k] = c.getOpacity() == 0 ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+					arr1[i][j][k] = c.toString().equals("0xffffffff") ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+					arr0[0][i][j][k] = arr1[i][j][k] == null ? false : true;
 				}
 			}
 		}
 		
-		return model;
+		return ModelData.arr(arr0, arr1);
 	}
 	
 	
@@ -117,7 +124,7 @@ public class Loaders {
 	}
 	
 	
-	public static Color[][][] line(Vec3 p, Vec3 q, Color c) {
+	public static ModelData line(Vec3 p, Vec3 q, Color c) {
 		
 		int minX = (int) (p.x() < q.x() ? p.x() : q.x()); 
 		int minY = (int) (p.y() < q.y() ? p.y() : q.y());
@@ -132,7 +139,8 @@ public class Loaders {
 			dy = (int) q.y(),
 			dz = (int) q.z();
 		
-		Color[][][] model = new Color[dx + 1][dy + 1][dz + 1];
+		boolean[][][][] arr0 = new boolean[1][dx + 1][dy + 1][dz + 1];
+		Color[][][] arr1 = new Color[dx + 1][dy + 1][dz + 1];
 		
 		int xc = 0,				// starting point at origin
 			yc = 0,
@@ -164,7 +172,8 @@ public class Loaders {
 				p1 += 2 * dy;
 				p2 += 2 * dz;
 				
-				model[xc][yc][zc] = c;
+				arr0[0][xc][yc][zc] = true;
+				arr1[xc][yc][zc] = c;
 			}
 		} else if (dy >= dx && dy >= dz) {
 			
@@ -190,7 +199,8 @@ public class Loaders {
 				p1 += 2 * dx;
 				p2 += 2 * dz;
 				
-				model[xc][yc][zc] = c;
+				arr0[0][xc][yc][zc] = true;
+				arr1[xc][yc][zc] = c;
 			}
 		} else {
 
@@ -216,10 +226,11 @@ public class Loaders {
 				p1 += 2 * dy;
 				p2 += 2 * dx;
 				
-				model[xc][yc][zc] = c;
+				arr0[0][xc][yc][zc] = true;
+				arr1[xc][yc][zc] = c;
 			}
 		}
 		
-		return model;
+		return ModelData.arr(arr0, arr1);
 	}
 }

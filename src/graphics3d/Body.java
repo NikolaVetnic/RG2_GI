@@ -1,5 +1,6 @@
 package graphics3d;
 
+import graphics3d.solids.voxelworld.Base;
 import graphics3d.solids.voxelworld.Util;
 
 public interface Body {
@@ -71,6 +72,8 @@ public interface Body {
 	
 	
 	static Body v(Solid solid, Color[][][] model) {
+		
+		// OBSOLETE
 		return new Body() {
 			@Override
 			public Solid solid() {
@@ -79,6 +82,29 @@ public interface Body {
 			
 			public Color voxel(int i, int j, int k) {
 				return model[i][j][k];
+			}
+			
+			@Override
+			public Material materialAt(Hit hit) {
+				
+				Vec3 pp = Util.unpack(hit.uv());
+				
+				return Material.diffuse(voxel(pp.xInt(), pp.yInt(), pp.zInt()));
+			}
+		};
+	}
+	
+	
+	static Body voxelDiffuse(Base v, Transform t) {
+		return new Body() {
+			
+			@Override
+			public Solid solid() {
+				return (Solid) v.transformed(t);
+			}
+			
+			public Color voxel(int i, int j, int k) {
+				return v.diffuse()[i][j][k];
 			}
 			
 			@Override

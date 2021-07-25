@@ -24,15 +24,15 @@ public class DirArray extends Base {
 	 *******************************************************************/
 
 	
-	protected DirArray(Color[][][] v) {
-		super(v);
-	}
+	protected DirArray(boolean[][][] arr0) 						{ super(arr0); 			}
+	protected DirArray(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
+	protected DirArray(ModelData data) 							{ super(data); 			}
 	
 	
-	public static DirArray arr(Color[][][] arr)				{ return new DirArray(arr); 						}
-	public static DirArray set(String baseLayerPath) throws IOException 		
-															{ return new DirArray(Loaders.set(baseLayerPath)); 	}
-	public static DirArray line(Vec3 p, Vec3 q, Color c) 	{ return new DirArray(Loaders.line(p, q, c)); 		}
+	public static DirArray model(boolean[][][] arr0)						{ return new DirArray(arr0); 							}
+	public static DirArray model(boolean[][][] arr0, Color[][][] arr1)		{ return new DirArray(arr0, arr1); 						}
+	public static DirArray set(String baseLayerPath) throws IOException 	{ return new DirArray(Loaders.set(baseLayerPath)); 	}
+	public static DirArray line(Vec3 p, Vec3 q, Color c) 					{ return new DirArray(Loaders.line(p, q, c)); 			}
 
 	
 	@Override
@@ -48,13 +48,14 @@ public class DirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 					
-					if (model[i][j][k] == null) continue;
+					if (!isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					
 					if (h.length == 0) continue;
 					
-					if (h[0].t() > afterTime) return h[0];
+					if (h[0].t() > afterTime)
+						return new HitVoxel(ray, h[0], i, j, k);
 				}
 			}
 		}
@@ -79,7 +80,7 @@ public class DirArray extends Base {
 			for (int j = ys; j != ye; j += yd) {
 				for (int k = zs; k != ze; k += zd) {
 					
-					if (model[i][j][k] == null) continue;
+					if (isPopulated(i, j, k)) continue;
 					
 					Hit[] h = getHits(Vec3.xyz(i, j, k), ray);
 					

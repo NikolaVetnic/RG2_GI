@@ -17,22 +17,22 @@ public class GridMarch2 extends Base {
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : 0x															*
+	 * ID : 05															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
 
 	
-	protected GridMarch2(Color[][][] model) {
-		super(model);
-	}
+	protected GridMarch2(boolean[][][] arr0) 					{ super(arr0); 			}
+	protected GridMarch2(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
+	protected GridMarch2(ModelData data) 						{ super(data); 			}
 	
 	
-	public static GridMarch2 arr(Color[][][] arr)			{ return new GridMarch2(arr); 						}
-	public static GridMarch2 set(String baseLayerPath) throws IOException 		
-															{ return new GridMarch2(Loaders.set(baseLayerPath)); }
-	public static GridMarch2 line(Vec3 p, Vec3 q, Color c) 	{ return new GridMarch2(Loaders.line(p, q, c)); 		}
+	public static GridMarch2 model(boolean[][][] arr0)						{ return new GridMarch2(arr0); 							}
+	public static GridMarch2 model(boolean[][][] arr0, Color[][][] arr1)	{ return new GridMarch2(arr0, arr1); 					}
+	public static GridMarch2 set(String baseLayerPath) throws IOException 	{ return new GridMarch2(Loaders.set(baseLayerPath)); 	}
+	public static GridMarch2 line(Vec3 p, Vec3 q, Color c) 					{ return new GridMarch2(Loaders.line(p, q, c)); 		}
 
 	
 	@Override
@@ -59,7 +59,7 @@ public class GridMarch2 extends Base {
 		
 		while (v0.inBoundingBox(v1)) {
 			
-			if (cell(v0) != null && t.max() > afterTime)
+			if (isPopulated(v0) && t.max() > afterTime)
 				return new HitVoxel(ray, HitData.tn(t.max(), s1.mul(Vec3.E[t.maxIndex()])), v0);
 
 			Vec3 tNext = t.add(dt);
@@ -101,7 +101,7 @@ public class GridMarch2 extends Base {
 			Vec3 p = Vec3.xyz(xs, ys, zs);
 			Hit[] h = getHits(p, ray);
 			
-			if (cell(p) != null) {
+			if (isPopulated(p)) {
 				if (num > 0) {
 					if (Math.abs(hits[num - 1].t() - h[0].t()) > 1e-8)
 						hits[num++] = new HitVoxel(ray, h[0], xs, ys, zs);
