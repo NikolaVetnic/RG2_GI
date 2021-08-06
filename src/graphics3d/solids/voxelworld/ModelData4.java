@@ -2,7 +2,7 @@ package graphics3d.solids.voxelworld;
 
 import graphics3d.Color;
 
-public class ModelData {
+public class ModelData4 {
 	
 	
 	/*
@@ -16,14 +16,14 @@ public class ModelData {
 	private Color[][][] diffuse;
 	
 	
-	private ModelData(boolean[][][][] model, Color[][][] diffuse) {
+	private ModelData4(boolean[][][][] model, Color[][][] diffuse) {
 		this.model = model;
 		this.diffuse = diffuse;
 	}
 	
 	
-	public static ModelData arr(boolean[][][][] model, Color[][][] diffuse) {
-		return new ModelData(model, diffuse);
+	public static ModelData4 arr(boolean[][][][] model, Color[][][] diffuse) {
+		return new ModelData4(model, diffuse);
 	}
 
 

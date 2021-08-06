@@ -27,13 +27,15 @@ public class DirArrayO extends Base {
 	
 	protected DirArrayO(boolean[][][] arr0) 					{ super(arr0); 			}
 	protected DirArrayO(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
-	protected DirArrayO(ModelData data) 						{ super(data); 			}
+	protected DirArrayO(ModelData3 data) 						{ super(data); 			}
+	protected DirArrayO(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static DirArrayO model(boolean[][][] arr0)						{ return new DirArrayO(arr0); 							}
 	public static DirArrayO model(boolean[][][] arr0, Color[][][] arr1)		{ return new DirArrayO(arr0, arr1); 					}
 	public static DirArrayO set(String baseLayerPath) throws IOException 	{ return new DirArrayO(Loaders.set(baseLayerPath)); 	}
-	public static DirArrayO line(Vec3 p, Vec3 q, Color c) 					{ return new DirArrayO(Loaders.line(p, q, c)); 		}
+	public static DirArrayO map(String baseLayerPath) throws IOException 	{ return new DirArrayO(Loaders.map(baseLayerPath)); 	}
+	public static DirArrayO line(Vec3 p, Vec3 q, Color c) 					{ return new DirArrayO(Loaders.line(p, q, c)); 			}
 
 	
 	@Override

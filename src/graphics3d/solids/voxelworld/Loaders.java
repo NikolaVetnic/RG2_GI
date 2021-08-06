@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Random;
 
 import graphics3d.Color;
 import graphics3d.Vec3;
@@ -19,7 +20,7 @@ public class Loaders {
 	private static final int DEFAULT_MAP_HEIGHT = 50;
 	
 	
-	public static ModelData map(String path) throws IOException {
+	public static ModelData3 map(String path) throws IOException {
 		
 		Image image = null;
 		
@@ -33,7 +34,7 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = DEFAULT_MAP_HEIGHT;
 		
-		boolean[][][][] arr0 = new boolean[1][x][y][z];
+		boolean[][][] arr0 = new boolean[x][y][z];
 		Color[][][] arr1 = new Color[x][y][z];
 		
 		PixelReader pr = image.getPixelReader();
@@ -45,17 +46,17 @@ public class Loaders {
 				int currZ = (int) (c.getBrightness() * z);
 				
 				for (int k = 0; k < currZ; k++) {
-					arr0[0][i][j][k] = true;
+					arr0[i][j][k] = true;
 					arr1[i][j][k] = Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
 				}
 			}
 		}
 		
-		return ModelData.arr(arr0, arr1);
+		return ModelData3.arr(arr0, arr1);
 	}
 
 	
-	public static ModelData set(String baseLayerPath) throws IOException {
+	public static ModelData3 set(String baseLayerPath) throws IOException {
 		
 		String setPath = getSetPath(baseLayerPath);
 		String setName = getSetName(baseLayerPath);
@@ -73,7 +74,7 @@ public class Loaders {
 		int y = (int) image.getHeight();
 		int z = new File(setPath).listFiles().length;
 		
-		boolean[][][][] arr0 = new boolean[1][x][y][z];
+		boolean[][][] arr0 = new boolean[x][y][z];
 		Color[][][] arr1 = new Color[x][y][z];
 		
 		for (int k = 0; k < z; k++) {
@@ -87,12 +88,12 @@ public class Loaders {
 				for (int i = 0; i < x; i++) {
 					javafx.scene.paint.Color c = pr.getColor(i, j);
 					arr1[i][j][k] = c.toString().equals("0xffffffff") ? null : Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
-					arr0[0][i][j][k] = arr1[i][j][k] == null ? false : true;
+					arr0[i][j][k] = arr1[i][j][k] == null ? false : true;
 				}
 			}
 		}
 		
-		return ModelData.arr(arr0, arr1);
+		return ModelData3.arr(arr0, arr1);
 	}
 	
 	
@@ -122,9 +123,43 @@ public class Loaders {
 		
 		return sb.toString();
 	}
+
+
+	public static ModelData4 line()
+	{
+		Random rng = new Random(42);
+
+		int lvl = 4;
+
+		double rngLimit = 0.0025;
+
+		Vec3 dim = Vec3.xyz(Math.pow(2, lvl), Math.pow(2, lvl), Math.pow(2, lvl));
+
+		boolean[][][][] arr0 = new boolean[1][dim.xInt()][dim.yInt()][dim.zInt()];
+		Color[][][] arr1 = new Color[dim.xInt()][dim.yInt()][dim.zInt()];
+
+		for (int i = 0; i < dim.xInt(); i++) {
+			for (int j = 0; j < dim.yInt(); j++) {
+				for (int k = 0; k < dim.zInt(); k++) {
+
+					if (rng.nextDouble() < 0.25) {			// test model, random voxels
+						arr0[0][i][j][k] = true;
+						arr1[i][j][k] = Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0);
+					}
+
+					if (i == j && j == k) {						// test model, cube diagonal
+						arr0[0][i][j][k] = false;
+						arr1[i][j][k] = Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0);
+					}
+				}
+			}
+		}
+
+		return ModelData4.arr(arr0, arr1);
+	}
 	
 	
-	public static ModelData line(Vec3 p, Vec3 q, Color c) {
+	public static ModelData3 line(Vec3 p, Vec3 q, Color c) {
 		
 		int minX = (int) (p.x() < q.x() ? p.x() : q.x()); 
 		int minY = (int) (p.y() < q.y() ? p.y() : q.y());
@@ -139,98 +174,98 @@ public class Loaders {
 			dy = (int) q.y(),
 			dz = (int) q.z();
 		
-		boolean[][][][] arr0 = new boolean[1][dx + 1][dy + 1][dz + 1];
+		boolean[][][] arr0 = new boolean[dx + 1][dy + 1][dz + 1];
 		Color[][][] arr1 = new Color[dx + 1][dy + 1][dz + 1];
 		
 		int xc = 0,				// starting point at origin
 			yc = 0,
 			zc = 0;
-		
+
 		int step = 1;
-		
+
 		if (dx >= dy && dx >= dz) {
-			
+
 			// driving axis is X-axis
-			
+
 			int p1 = 2 * dy - dx,
 				p2 = 2 * dz - dx;
 
 			while (xc != dx) {
-				
+
 				xc += step;
-				
+
 				if (p1 >= 0) {
 					yc += step;
 					p1 -= 2 * dx;
 				}
-				
+
 				if (p2 >= 0) {
 					zc += step;
 					p2 -= 2 * dx;
 				}
-				
+
 				p1 += 2 * dy;
 				p2 += 2 * dz;
-				
-				arr0[0][xc][yc][zc] = true;
+
+				arr0[xc][yc][zc] = true;
 				arr1[xc][yc][zc] = c;
 			}
 		} else if (dy >= dx && dy >= dz) {
-			
+
 			// driving axis is Y-axis
-			
+
 			int p1 = 2 * dx - dy,
 				p2 = 2 * dz - dy;
-			
+
 			while (yc != dy) {
-				
+
 				yc += step;
-				
+
 				if (p1 >= 0) {
 					xc += step;
 					p1 -= 2 * dy;
 				}
-				
+
 				if (p2 >= 0) {
 					zc += step;
 					p2 -= 2 * dy;
 				}
-				
+
 				p1 += 2 * dx;
 				p2 += 2 * dz;
-				
-				arr0[0][xc][yc][zc] = true;
+
+				arr0[xc][yc][zc] = true;
 				arr1[xc][yc][zc] = c;
 			}
 		} else {
 
 			// driving axis is Z-axis
-			
+
 			int p1 = 2 * dy - dz,
 				p2 = 2 * dx - dz;
-			
+
 			while (zc != dz) {
-				
+
 				zc += step;
-				
+
 				if (p1 >= 0) {
 					yc += step;
 					p1 -= 2 * dz;
 				}
-				
+
 				if (p2 >= 0) {
 					xc += step;
 					p2 -= 2 * dz;
 				}
-				
+
 				p1 += 2 * dy;
 				p2 += 2 * dx;
-				
-				arr0[0][xc][yc][zc] = true;
+
+				arr0[xc][yc][zc] = true;
 				arr1[xc][yc][zc] = c;
 			}
 		}
-		
-		return ModelData.arr(arr0, arr1);
+
+		return ModelData3.arr(arr0, arr1);
 	}
 }

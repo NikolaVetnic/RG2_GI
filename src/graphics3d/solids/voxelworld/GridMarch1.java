@@ -23,12 +23,14 @@ public class GridMarch1 extends Base {
 	
 	protected GridMarch1(boolean[][][] arr0) 					{ super(arr0); 			}
 	protected GridMarch1(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
-	protected GridMarch1(ModelData data) 						{ super(data); 			}
+	protected GridMarch1(ModelData3 data) 						{ super(data); 			}
+	protected GridMarch1(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static GridMarch1 model(boolean[][][] arr0)						{ return new GridMarch1(arr0); 							}
 	public static GridMarch1 model(boolean[][][] arr0, Color[][][] arr1)	{ return new GridMarch1(arr0, arr1); 					}
 	public static GridMarch1 set(String baseLayerPath) throws IOException 	{ return new GridMarch1(Loaders.set(baseLayerPath)); 	}
+	public static GridMarch1 map(String baseLayerPath) throws IOException 	{ return new GridMarch1(Loaders.map(baseLayerPath)); 	}
 	public static GridMarch1 line(Vec3 p, Vec3 q, Color c) 					{ return new GridMarch1(Loaders.line(p, q, c)); 		}
 
 	

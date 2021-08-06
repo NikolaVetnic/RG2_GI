@@ -3,7 +3,6 @@ package graphics3d.solids.voxelworld;
 import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
-import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
 
@@ -25,13 +24,19 @@ public class OctreeRec extends Base {
 	
 	protected OctreeRec(boolean[][][] arr0) 					{ super(Octree.fromModel(arr0).data()); 		}
 	protected OctreeRec(boolean[][][] arr0, Color[][][] arr1) 	{ super(Octree.fromModel(arr0).data(), arr1); 	}
-	protected OctreeRec(ModelData data) 						{ super(data); 									}
+	protected OctreeRec(ModelData3 data) 						{ super(data); 									}
+	protected OctreeRec(ModelData4 data) 						{ super(data); 									}
 	
 	
 	public static OctreeRec model(boolean[][][] arr0)						{ return new OctreeRec(arr0); 							}
 	public static OctreeRec model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeRec(arr0, arr1); 					}
 	public static OctreeRec set(String baseLayerPath) throws IOException 	{ return new OctreeRec(Loaders.set(baseLayerPath)); 	}
-	public static OctreeRec line(Vec3 p, Vec3 q, Color c) 					{ return new OctreeRec(Loaders.line(p, q, c)); 		}
+
+
+	public static OctreeRec line(Vec3 p, Vec3 q, Color c) {
+		ModelData3 modelData = Loaders.line(p, q, c);
+		return new OctreeRec(modelData.model(), modelData.diffuse());
+	}
 
 
 	@Override

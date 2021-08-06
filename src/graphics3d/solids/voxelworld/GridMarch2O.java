@@ -1,7 +1,6 @@
 package graphics3d.solids.voxelworld;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import graphics3d.Color;
 import graphics3d.Hit;
@@ -24,7 +23,8 @@ public class GridMarch2O extends Base {
 	
 	protected GridMarch2O(boolean[][][] arr0) 					{ super(arr0); 			}
 	protected GridMarch2O(boolean[][][] arr0, Color[][][] arr1) { super(arr0, arr1); 	}
-	protected GridMarch2O(ModelData data) 						{ super(data); 			}
+	protected GridMarch2O(ModelData3 data) 						{ super(data); 			}
+	protected GridMarch2O(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static GridMarch2O model(boolean[][][] arr0)						{ return new GridMarch2O(arr0); 						}

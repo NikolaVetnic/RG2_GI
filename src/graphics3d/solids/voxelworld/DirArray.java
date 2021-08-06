@@ -26,12 +26,14 @@ public class DirArray extends Base {
 	
 	protected DirArray(boolean[][][] arr0) 						{ super(arr0); 			}
 	protected DirArray(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
-	protected DirArray(ModelData data) 							{ super(data); 			}
+	protected DirArray(ModelData3 data) 						{ super(data); 			}
+	protected DirArray(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static DirArray model(boolean[][][] arr0)						{ return new DirArray(arr0); 							}
 	public static DirArray model(boolean[][][] arr0, Color[][][] arr1)		{ return new DirArray(arr0, arr1); 						}
-	public static DirArray set(String baseLayerPath) throws IOException 	{ return new DirArray(Loaders.set(baseLayerPath)); 	}
+	public static DirArray set(String baseLayerPath) throws IOException 	{ return new DirArray(Loaders.set(baseLayerPath)); 		}
+	public static DirArray map(String baseLayerPath) throws IOException 	{ return new DirArray(Loaders.map(baseLayerPath)); 		}
 	public static DirArray line(Vec3 p, Vec3 q, Color c) 					{ return new DirArray(Loaders.line(p, q, c)); 			}
 
 	

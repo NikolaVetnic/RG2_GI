@@ -71,9 +71,14 @@ public abstract class Base implements Solid {
 		this.diffuse = diffuse;
 		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
 	}
+
+
+	protected Base(ModelData3 data) {
+		this(data.model(), data.diffuse());
+	}
 	
 	
-	protected Base(ModelData data) {
+	protected Base(ModelData4 data) {
 		this(data.model(), data.diffuse());
 	}
 	

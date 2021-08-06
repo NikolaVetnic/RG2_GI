@@ -10,7 +10,6 @@ import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import mars.utils.Numeric;
 
 public class GridMarch2 extends Base {
 	
@@ -26,12 +25,14 @@ public class GridMarch2 extends Base {
 	
 	protected GridMarch2(boolean[][][] arr0) 					{ super(arr0); 			}
 	protected GridMarch2(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
-	protected GridMarch2(ModelData data) 						{ super(data); 			}
+	protected GridMarch2(ModelData3 data) 						{ super(data); 			}
+	protected GridMarch2(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static GridMarch2 model(boolean[][][] arr0)						{ return new GridMarch2(arr0); 							}
 	public static GridMarch2 model(boolean[][][] arr0, Color[][][] arr1)	{ return new GridMarch2(arr0, arr1); 					}
 	public static GridMarch2 set(String baseLayerPath) throws IOException 	{ return new GridMarch2(Loaders.set(baseLayerPath)); 	}
+	public static GridMarch2 map(String baseLayerPath) throws IOException 	{ return new GridMarch2(Loaders.map(baseLayerPath)); 	}
 	public static GridMarch2 line(Vec3 p, Vec3 q, Color c) 					{ return new GridMarch2(Loaders.line(p, q, c)); 		}
 
 	

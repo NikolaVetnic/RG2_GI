@@ -25,11 +25,13 @@ public class BruteForce extends Base {
 	
 	protected BruteForce(boolean[][][] arr0) 					{ super(arr0); 			}
 	protected BruteForce(boolean[][][] arr0, Color[][][] arr1) 	{ super(arr0, arr1); 	}
-	protected BruteForce(ModelData data) 						{ super(data); 			}
+	protected BruteForce(ModelData3 data) 						{ super(data); 			}
+	protected BruteForce(ModelData4 data) 						{ super(data); 			}
 	
 	
 	public static BruteForce model(boolean[][][] arr0)						{ return new BruteForce(arr0); 							}
 	public static BruteForce model(boolean[][][] arr0, Color[][][] arr1)	{ return new BruteForce(arr0, arr1); 					}
+	public static BruteForce map(String path) throws IOException 			{ return new BruteForce(Loaders.map(path)); 			}
 	public static BruteForce set(String baseLayerPath) throws IOException 	{ return new BruteForce(Loaders.set(baseLayerPath)); 	}
 	public static BruteForce line(Vec3 p, Vec3 q, Color c) 					{ return new BruteForce(Loaders.line(p, q, c)); 		}
 	

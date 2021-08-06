@@ -20,14 +20,25 @@ public class OctreeBF extends Base {
 	
 	protected OctreeBF(boolean[][][] arr0) 						{ super(Octree.fromModel(arr0).data()); 		}
 	protected OctreeBF(boolean[][][] arr0, Color[][][] arr1) 	{ super(Octree.fromModel(arr0).data(), arr1); 	}
-	protected OctreeBF(ModelData data) 							{ super(data); 									}
+	protected OctreeBF(ModelData3 data) 						{ super(data); 									}
+	protected OctreeBF(ModelData4 data) 						{ super(data); 									}
 	
 	
 	public static OctreeBF model(boolean[][][] arr0)						{ return new OctreeBF(arr0); 							}
 	public static OctreeBF model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeBF(arr0, arr1); 						}
-	public static OctreeBF set(String baseLayerPath) throws IOException 	{ return new OctreeBF(Loaders.set(baseLayerPath)); 	}
-	public static OctreeBF line(Vec3 p, Vec3 q, Color c) 					{ return new OctreeBF(Loaders.line(p, q, c)); 			}
+	public static OctreeBF set(String baseLayerPath) throws IOException 	{ return new OctreeBF(Loaders.set(baseLayerPath)); 		}
 
+
+	public static OctreeBF map(String path) throws IOException {
+		ModelData3 modelData = Loaders.map(path);
+		return new OctreeBF(modelData.model(), modelData.diffuse());
+	}
+
+
+	public static OctreeBF line(Vec3 p, Vec3 q, Color c) {
+		ModelData3 modelData = Loaders.line(p, q, c);
+		return new OctreeBF(modelData.model(), modelData.diffuse());
+	}
 
 	
 	@Override

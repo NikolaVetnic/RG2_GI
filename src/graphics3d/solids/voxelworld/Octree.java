@@ -31,7 +31,7 @@ public class Octree {
 	
 	private static int treeDepthFromModel(boolean[][][] model) {
 		return (int) (Math.log(model.length) / Math.log(2)) + 1;					// calculate octree depth from dim of given model
-	}
+	}																				// add 2 to allow models that are of "irregular size", i.e. not 2^n
 	
 	
 	public static Octree fromModel(boolean[][][] model) {

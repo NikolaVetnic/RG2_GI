@@ -5,7 +5,6 @@ import java.io.IOException;
 import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
-import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
 
@@ -23,13 +22,19 @@ public class OctreeRecO extends Base {
 
 	protected OctreeRecO(boolean[][][] arr0) 					{ super(Octree.fromModel(arr0).data()); 		}
 	protected OctreeRecO(boolean[][][] arr0, Color[][][] arr1) 	{ super(Octree.fromModel(arr0).data(), arr1); 	}
-	protected OctreeRecO(ModelData data) 						{ super(data); 									}
+	protected OctreeRecO(ModelData3 data) 						{ super(data); 									}
+	protected OctreeRecO(ModelData4 data) 						{ super(data); 									}
 	
 	
 	public static OctreeRecO model(boolean[][][] arr0)						{ return new OctreeRecO(arr0); 							}
 	public static OctreeRecO model(boolean[][][] arr0, Color[][][] arr1)	{ return new OctreeRecO(arr0, arr1); 					}
 	public static OctreeRecO set(String baseLayerPath) throws IOException 	{ return new OctreeRecO(Loaders.set(baseLayerPath)); 	}
-	public static OctreeRecO line(Vec3 p, Vec3 q, Color c) 					{ return new OctreeRecO(Loaders.line(p, q, c)); 		}
+
+
+	public static OctreeRecO line(Vec3 p, Vec3 q, Color c) {
+		ModelData3 modelData = Loaders.line(p, q, c);
+		return new OctreeRecO(modelData.model(), modelData.diffuse());
+	}
 
 
 	private Vec3Hit octreeDFS(Vec3 curr, int lvl, Ray ray, double afterTime) {

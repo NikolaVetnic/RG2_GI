@@ -12,15 +12,7 @@ import graphics3d.Scene;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.BruteForce;
-import graphics3d.solids.voxelworld.DirArray;
-import graphics3d.solids.voxelworld.DirArrayO;
-import graphics3d.solids.voxelworld.GridMarch1;
-import graphics3d.solids.voxelworld.GridMarch2;
-import graphics3d.solids.voxelworld.GridMarch2O;
-import graphics3d.solids.voxelworld.OctreeBF;
-import graphics3d.solids.voxelworld.OctreeRec;
-import graphics3d.solids.voxelworld.OctreeRecO;
+import graphics3d.solids.voxelworld.*;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -30,19 +22,19 @@ public class VoxelWorld_TestScene extends SceneBase {
 
 	public static class Factory implements Function1<Scene, Double> {
 
-		@GadgetDouble(p = -.5, q = 0.5) double rotateX = 0.105;
-		@GadgetDouble(p = -.5, q = 0.5) double rotateY = 0.075;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateX = -0.15;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateY = -0.50;
 		@GadgetDouble(p = -.5, q = 0.5) double rotateZ = 0.0;
 
-		@GadgetDouble(p = -50, q = 50) double translateX = 0.0;
+		@GadgetDouble(p = -90, q = 50) double translateX = -75.0;
 		@GadgetDouble(p = -50, q = 50) double translateY = 0.0;
-		@GadgetDouble(p = -50, q = 50) double translateZ = -1.5;
+		@GadgetDouble(p = -50, q = 50) double translateZ = -37.5;
 		
 		@GadgetInteger(min = 0, max = 10) int xInt = 0;
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
 		@GadgetInteger(min = 3, max = 10) int zInt = 0;
 
-		@GadgetDouble(p = 0, q = 5.0) double scale = 0.45;
+		@GadgetDouble(p = 0, q = 5.0) double scale = 0.0625;
 
 		@GadgetInteger int seed = 129832191;
 
@@ -104,11 +96,42 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.model(arr0, arr1);
 //		GridMarch1 	vo = GridMarch1	.model(arr0, arr1);
 //		GridMarch2 	vo = GridMarch2	.model(arr0, arr1);
-		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
+//		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
 //		OctreeBF	vo = OctreeBF	.model(arr0, arr1);
 //		OctreeRec	vo = OctreeRec	.model(arr0, arr1);
 //		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
-		
+
+
+//		BruteForce 	vo = BruteForce	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		DirArray 	vo = DirArray	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		DirArrayO 	vo = DirArrayO	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		GridMarch1 	vo = GridMarch1	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		GridMarch2 	vo = GridMarch2	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		GridMarch2O	vo = GridMarch2O.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		OctreeBF	vo = OctreeBF	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(21), Color.WHITE);
+//		OctreeRec	vo = OctreeRec	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+//		OctreeRecO	vo = OctreeRecO	.line(Vec3.EXYZ.mul(0), Vec3.EXYZ.mul(7), Color.WHITE);
+
+
+//		BruteForce 	vo = BruteForce	.map("img//ares-vallis.jpg");
+//		DirArray 	vo = DirArray	.map("img//ares-vallis.jpg");
+//		DirArrayO 	vo = DirArrayO	.map("img//ares-vallis.jpg");
+//		GridMarch1 	vo = GridMarch1	.map("img//ares-vallis.jpg");
+//		GridMarch2 	vo = GridMarch2	.map("img//ares-vallis.jpg");
+		GridMarch2O	vo = GridMarch2O.map("img//ares-vallis.jpg");
+//		OctreeBF	vo = OctreeBF	.map("img//ares-vallis.jpg"); // !!!
+//		OctreeRec	vo = OctreeRec	.map("img//ares-vallis.jpg"); // !!!
+//		OctreeRecO	vo = OctreeRecO	.map("img//ares-vallis.jpg"); // !!!
+
+
+//		BruteForce 	vo = BruteForce	.set("img//voxel_set_01/test_000.bmp");
+//		DirArray 	vo = DirArray	.set("img//voxel_set_01/test_000.bmp");
+//		DirArrayO 	vo = DirArrayO	.set("img//voxel_set_01/test_000.bmp");
+//		GridMarch1	vo = GridMarch1 .set("img//voxel_set_01/test_000.bmp");
+//		GridMarch2	vo = GridMarch2 .set("img//voxel_set_01/test_000.bmp");
+//		GridMarch2O	vo = GridMarch2O.set("img//voxel_set_01/test_000.bmp");
+
+
 		Transform t = Transform.translation			(Vec3.xyz(translateX, translateY, translateZ).sub(dim.mul(0.5)))
 				.andThen(Transform.rotationAboutX	(rotateX)
 				.andThen(Transform.rotationAboutY	(rotateY)
@@ -122,8 +145,8 @@ public class VoxelWorld_TestScene extends SceneBase {
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0,25, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT), 
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0,25), Vec3.xyz( 0, 0,-1)), mDiffuseK	 ),
 				
-//				Body.uniform(vo.transformed(t), mDiffuseY)
-				Body.voxelDiffuse(vo, t)
+				Body.uniform(vo.transformed(t), mDiffuseY)
+//				Body.voxelDiffuse(vo, t)
 		));
 		
 		cameraTransform = Transform.IDENTITY
