@@ -1,4 +1,4 @@
-package graphics3d.solids.voxelworld;
+package graphics3d.solids.voxelworld.d;
 
 public class Octree {
 	
@@ -30,8 +30,9 @@ public class Octree {
 	
 	
 	private static int treeDepthFromModel(boolean[][][] model) {
-		return (int) (Math.log(model.length) / Math.log(2)) + 1;					// calculate octree depth from dim of given model
-	}																				// add 2 to allow models that are of "irregular size", i.e. not 2^n
+		double d = Math.log(model.length) / Math.log(2) + 1;						// calculate octree depth from dim of given model
+		return (int) d + (d == (int) d ? 0 : 1);									// add 2 to allow models that are of "irregular size", i.e. not 2^n
+	}
 	
 	
 	public static Octree fromModel(boolean[][][] model) {
@@ -55,10 +56,10 @@ public class Octree {
 	
 	
 	private void copyModel(boolean[][][] model) {
-		
+
 		for (int i = 0; i < model.length; i++) {
-			for (int j = 0; j < model.length; j++) {
-				for (int k = 0; k < model.length; k++) {
+			for (int j = 0; j < model[0].length; j++) {
+				for (int k = 0; k < model[0][0].length; k++) {
 					data[0][i][j][k] = model[i][j][k];
 				}
 			}

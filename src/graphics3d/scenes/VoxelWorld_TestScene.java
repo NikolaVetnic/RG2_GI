@@ -12,7 +12,7 @@ import graphics3d.Scene;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.*;
+import graphics3d.solids.voxelworld.m.OctreeRecO;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -118,10 +118,10 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.map("img//ares-vallis.jpg");
 //		GridMarch1 	vo = GridMarch1	.map("img//ares-vallis.jpg");
 //		GridMarch2 	vo = GridMarch2	.map("img//ares-vallis.jpg");
-		GridMarch2O	vo = GridMarch2O.map("img//ares-vallis.jpg");
-//		OctreeBF	vo = OctreeBF	.map("img//ares-vallis.jpg"); // !!!
-//		OctreeRec	vo = OctreeRec	.map("img//ares-vallis.jpg"); // !!!
-//		OctreeRecO	vo = OctreeRecO	.map("img//ares-vallis.jpg"); // !!!
+//		GridMarch2O	vo = GridMarch2O.map("img//ares-vallis.jpg");
+//		OctreeBF	vo = OctreeBF	.map("img//ares-vallis.jpg");
+//		OctreeRec	vo = OctreeRec	.map("img//ares-vallis.jpg");
+//		OctreeRecO	vo = OctreeRecO	.map("img//ares-vallis.jpg");
 
 
 //		BruteForce 	vo = BruteForce	.set("img//voxel_set_01/test_000.bmp");
@@ -130,6 +130,9 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		GridMarch1	vo = GridMarch1 .set("img//voxel_set_01/test_000.bmp");
 //		GridMarch2	vo = GridMarch2 .set("img//voxel_set_01/test_000.bmp");
 //		GridMarch2O	vo = GridMarch2O.set("img//voxel_set_01/test_000.bmp");
+//		OctreeBF	vo = OctreeBF	.set("img//voxel_set_01/test_000.bmp");
+//		OctreeRec	vo = OctreeRec	.set("img//voxel_set_01/test_000.bmp");
+		OctreeRecO vo = OctreeRecO	.set("img//voxel_set_01/test_000.bmp");
 
 
 		Transform t = Transform.translation			(Vec3.xyz(translateX, translateY, translateZ).sub(dim.mul(0.5)))

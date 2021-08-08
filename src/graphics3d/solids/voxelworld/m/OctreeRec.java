@@ -1,16 +1,19 @@
-package graphics3d.solids.voxelworld;
+package graphics3d.solids.voxelworld.m;
 
 import graphics3d.Color;
 import graphics3d.Hit;
 import graphics3d.Ray;
 import graphics3d.Vec3;
 import graphics3d.solids.Box;
+import graphics3d.solids.voxelworld.a.BaseM;
+import graphics3d.solids.voxelworld.d.*;
+import graphics3d.solids.voxelworld.u.Loaders;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OctreeRec extends Base {
+public class OctreeRec extends BaseM {
 
 
 	/********************************************************************
@@ -30,7 +33,18 @@ public class OctreeRec extends Base {
 	
 	public static OctreeRec model(boolean[][][] arr0)						{ return new OctreeRec(arr0); 							}
 	public static OctreeRec model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeRec(arr0, arr1); 					}
-	public static OctreeRec set(String baseLayerPath) throws IOException 	{ return new OctreeRec(Loaders.set(baseLayerPath)); 	}
+
+
+	public static OctreeRec map(String path) throws IOException {
+		ModelData3 modelData = Loaders.map(path);
+		return new OctreeRec(modelData.model(), modelData.diffuse());
+	}
+
+
+	public static OctreeRec set(String baseLayerPath) throws IOException {
+		ModelData3 modelData = Loaders.set(baseLayerPath);
+		return new OctreeRec(modelData.model(), modelData.diffuse());
+	}
 
 
 	public static OctreeRec line(Vec3 p, Vec3 q, Color c) {

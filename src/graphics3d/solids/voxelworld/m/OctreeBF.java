@@ -1,12 +1,15 @@
-package graphics3d.solids.voxelworld;
+package graphics3d.solids.voxelworld.m;
 
 import graphics3d.*;
 import graphics3d.solids.Box;
+import graphics3d.solids.voxelworld.a.BaseM;
+import graphics3d.solids.voxelworld.d.*;
+import graphics3d.solids.voxelworld.u.Loaders;
 
 import java.io.IOException;
 import java.util.*;
 
-public class OctreeBF extends Base {
+public class OctreeBF extends BaseM {
 
 	
 	/********************************************************************
@@ -26,11 +29,16 @@ public class OctreeBF extends Base {
 	
 	public static OctreeBF model(boolean[][][] arr0)						{ return new OctreeBF(arr0); 							}
 	public static OctreeBF model(boolean[][][] arr0, Color[][][] arr1)		{ return new OctreeBF(arr0, arr1); 						}
-	public static OctreeBF set(String baseLayerPath) throws IOException 	{ return new OctreeBF(Loaders.set(baseLayerPath)); 		}
 
 
 	public static OctreeBF map(String path) throws IOException {
 		ModelData3 modelData = Loaders.map(path);
+		return new OctreeBF(modelData.model(), modelData.diffuse());
+	}
+
+
+	public static OctreeBF set(String baseLayerPath) throws IOException {
+		ModelData3 modelData = Loaders.set(baseLayerPath);
 		return new OctreeBF(modelData.model(), modelData.diffuse());
 	}
 

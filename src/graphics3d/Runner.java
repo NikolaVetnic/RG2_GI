@@ -2,6 +2,7 @@ package graphics3d;
 
 import graphics3d.buffers.Buffering;
 import graphics3d.buffers.MultiBuffering;
+import graphics3d.scenes.VoxelWorld_TestF;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
@@ -107,7 +108,8 @@ public class Runner implements Drawing {
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestImageTextures.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestQuadrics.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestMesh.Factory();
-	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene.Factory();
+	Function1<Scene, Double> fScene = new VoxelWorld_TestF.Factory();
 	
 	
 	Renderer renderer;

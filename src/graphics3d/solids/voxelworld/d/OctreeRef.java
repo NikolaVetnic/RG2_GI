@@ -1,4 +1,4 @@
-package graphics3d.solids.voxelworld;
+package graphics3d.solids.voxelworld.d;
 
 public class OctreeRef {
 	
