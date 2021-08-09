@@ -1,20 +1,24 @@
 package graphics3d.scenes;
 
-import graphics3d.*;
+import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+
+import graphics3d.BSDF;
+import graphics3d.Body;
+import graphics3d.Color;
+import graphics3d.Material;
+import graphics3d.Scene;
+import graphics3d.Transform;
+import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.f.FGridMarch1;
-import graphics3d.solids.voxelworld.f.FGridMarch2;
-import graphics3d.solids.voxelworld.f.FGridMarch2O;
+import graphics3d.solids.voxelworld.pf.PFGridMarch2O;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
 import mars.utils.Numeric;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Random;
-
-public class VoxelWorld_TestF extends SceneBase {
+public class VoxelWorld_TestPFScene extends SceneBase {
 
 	public static class Factory implements Function1<Scene, Double> {
 
@@ -24,7 +28,7 @@ public class VoxelWorld_TestF extends SceneBase {
 
 		@GadgetDouble(p = -90, q = 50) double translateX = 0.0;
 		@GadgetDouble(p = -50, q = 50) double translateY = 0.0;
-		@GadgetDouble(p = -50, q = 50) double translateZ = 50.0;
+		@GadgetDouble(p = -50, q = 50) double translateZ = 0.0;
 
 		@GadgetInteger(min = 0, max = 10) int xInt = 0;
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
@@ -38,7 +42,7 @@ public class VoxelWorld_TestF extends SceneBase {
 
 		@Override public Scene at(Double time) {
 			try {
-				return new VoxelWorld_TestF(
+				return new VoxelWorld_TestPFScene(
 						seed, cameraAngle,
 						rotateX, rotateY, rotateZ,
 						xInt, yInt, zInt,
@@ -52,7 +56,7 @@ public class VoxelWorld_TestF extends SceneBase {
 	}
 
 	@SuppressWarnings("unused")
-	public VoxelWorld_TestF(
+	public VoxelWorld_TestPFScene(
 			int 	seed, 		double 	cameraAngle, 
 			double 	rotateX, 	double 	rotateY, 		double 	rotateZ, 
 			int 	xInt, 		int 	yInt, 			int 	zInt, 
@@ -64,12 +68,12 @@ public class VoxelWorld_TestF extends SceneBase {
 		Material mDiffuseY 	= new Material(BSDF.diffuse(Color.hsb( 60, 0.7, 0.8)));
 		Material mDiffuseK 	= new Material(BSDF.diffuse(Color.hsb(  0, 0.0, 0.0)));
 
-		int len = 256;
+		int len = 64;
 		Vec3 dim = Vec3.EXYZ.mul(len);
 
 //		FGridMarch1 vo = FGridMarch1.d(
 //		FGridMarch2 vo = FGridMarch2.d(
-		FGridMarch2O vo = FGridMarch2O.d(
+		PFGridMarch2O vo = PFGridMarch2O.d(
 				dim,
 				v -> v.xInt() % 2 == 0 && v.zInt() == 0,
 				v -> v.x() % 10 < 5 && v.yInt() % 10 < 5 ? Color.WHITE : Color.hsb( 120, 0.7, 0.8));

@@ -2,26 +2,27 @@ package graphics3d.solids.voxelworld.a;
 
 import graphics3d.*;
 import graphics3d.solids.Box;
-import graphics3d.solids.voxelworld.d.VoxelData;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public abstract class BaseF implements Solid {
-	
+public abstract class BasePF implements Solid {
 
-	protected Function<Vec3, VoxelData> dataFunc;
+
+	protected Predicate<Vec3> modelPred;
+	protected Function<Vec3, Color> colorFunc;
 	protected Vec3 len;
 
 
-	protected BaseF(Vec3 d, Function<Vec3, VoxelData> f) {
+	protected BasePF(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) {
 		this.len = d;
-		this.dataFunc = f;
+		this.modelPred = p;
+		this.colorFunc = c;
 	}
 
 
-	protected BaseF(int x, int y, int z, Function<Vec3, VoxelData> f) {
-		this(Vec3.xyz(x, y, z), f);
+	protected BasePF(int x, int y, int z, Predicate<Vec3> p, Function<Vec3, Color> c) {
+		this(Vec3.xyz(x, y, z), p, c);
 	}
 	
 	
@@ -38,12 +39,12 @@ public abstract class BaseF implements Solid {
 	}
 
 
-	public boolean isPopulated(int i, int j, int k) 	{ return isPopulated(Vec3.xyz(i, j, k)); 	}
-	public boolean isPopulated(Vec3 p) 					{ return dataFunc.apply(p).isPopulated(); 	}
-	
-	
-	public Color color(int x, int y, int z) { return dataFunc.apply(Vec3.xyz(x, y, z)).color(); 	}
-	public Color color(Vec3 p) 				{ return dataFunc.apply(p).color(); 					}
+	public boolean isPopulated(int i, int j, int k) 	{ return isPopulated(Vec3.xyz(i, j, k)); 		}
+	public boolean isPopulated(Vec3 p) 					{ return modelPred.test(p); 					}
+
+
+	public Color color(int x, int y, int z) 			{ return colorFunc.apply(Vec3.xyz(x, y, z)); 	}
+	public Color color(Vec3 p) 							{ return colorFunc.apply(p); 					}
 	
 	
 	protected static Hit[] getHits(Vec3 p, Vec3 d, Ray ray) {

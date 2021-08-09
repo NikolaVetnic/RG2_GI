@@ -1,5 +1,6 @@
 package graphics3d;
 
+import graphics3d.solids.voxelworld.a.BasePF;
 import graphics3d.solids.voxelworld.a.BaseF;
 import graphics3d.solids.voxelworld.a.BaseM;
 import graphics3d.solids.voxelworld.u.Util;
@@ -96,29 +97,7 @@ public interface Body {
 	}
 	
 	
-	static Body voxelDiffuse(BaseM v, Transform t) {
-		return new Body() {
-			
-			@Override
-			public Solid solid() {
-				return (Solid) v.transformed(t);
-			}
-			
-			public Color voxel(int i, int j, int k) {
-				return v.diffuse()[i][j][k];
-			}
-			
-			@Override
-			public Material materialAt(Hit hit) {
-				
-				Vec3 pp = Util.unpack(hit.uv());
-				
-				return Material.diffuse(voxel(pp.xInt(), pp.yInt(), pp.zInt()));
-			}
-		};
-	}
-
-	static Body voxelDiffuseF(BaseF v, Transform t) {
+	static Body voxelDiffuseF(Solid v, Transform t) {
 		return new Body() {
 
 			@Override
@@ -127,7 +106,12 @@ public interface Body {
 			}
 
 			public Color voxel(int i, int j, int k) {
-				return v.color(i, j, k);
+				if 		(v instanceof BaseM)
+					return ((BaseM) v).diffuse()[i][j][k];
+				else if (v instanceof BaseF)
+					return ((BaseF) v).color(i, j, k);
+				else
+					return ((BasePF) v).color(i, j, k);
 			}
 
 			@Override

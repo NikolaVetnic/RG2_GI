@@ -1,7 +1,8 @@
-package graphics3d.solids.voxelworld.f;
+package graphics3d.solids.voxelworld.pf;
 
 import graphics3d.*;
-import graphics3d.solids.voxelworld.a.BaseF;
+import graphics3d.solids.HalfSpace;
+import graphics3d.solids.voxelworld.a.BasePF;
 import graphics3d.solids.voxelworld.a.BaseM;
 import graphics3d.solids.voxelworld.d.HitVoxel;
 import graphics3d.solids.voxelworld.d.ModelData3;
@@ -14,88 +15,62 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class FGridMarch1 extends BaseF {
+public class PFGridMarch2 extends BasePF {
 	
 	
 	/********************************************************************
 	 * 																	*
-	 * ID : xx															*
+	 * ID : 05															*
 	 * 																	*
 	 * Description:														*
 	 * 																	*
 	 *******************************************************************/
 
 
-	protected FGridMarch1(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) { super(d, p, c); }
+	protected PFGridMarch2(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) { super(d, p, c); }
 
 
-	public static FGridMarch1 d(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) 	{
-		return new FGridMarch1(d, p, c);
+	public static PFGridMarch2 d(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) 	{
+		return new PFGridMarch2(d, p, c);
 	}
 
 
-	public static FGridMarch1 xyz(int x, int y, int z, Predicate<Vec3> p, Function<Vec3, Color> c) {
-		return new FGridMarch1(Vec3.xyz(x, y, z), p, c);
+	public static PFGridMarch2 xyz(int x, int y, int z, Predicate<Vec3> p, Function<Vec3, Color> c) {
+		return new PFGridMarch2(Vec3.xyz(x, y, z), p, c);
 	}
 
 	
 	@Override
 	public Hit firstHit(Ray ray, double afterTime) {
 		
-		Hit[] boundingBoxHits = getHits(Vec3.ZERO, Vec3.xyz(lenX(), lenY(), lenZ()), ray);
-		
+		Hit[] boundingBoxHits = getBoundingBoxHits(ray);
 		if (boundingBoxHits.length == 0) return Hit.POSITIVE_INFINITY;
 		
-		Vec3[] loopData = Util.getLoopData(Vec3.xyz(lenX(), lenY(), lenZ()), ray, boundingBoxHits);
+		Vec3[] loopData = Util.getLoopData(len(), ray, boundingBoxHits);
 		
-		int xs = loopData[0].xInt(),	xe = loopData[1].xInt(),	xd = loopData[2].xInt(),
-			ys = loopData[0].yInt(),	ye = loopData[1].yInt(),	yd = loopData[2].yInt(),
-			zs = loopData[0].zInt(),	ze = loopData[1].zInt(),	zd = loopData[2].zInt();
+		Vec3 v0 = loopData[0];
+		Vec3 v1 = loopData[1];
 		
-		/*
-		 * Render only the voxel faces that lie on the bounding box:
-		 * 
-		 * if (cell(loopData[0]) != null && boundingBoxHits[0].t() > afterTime) 
-		 *     return new HitVoxel(ray, boundingBoxHits[0], xs, ys, zs);
-		 *     
-		 * if (cell(loopData[1].sub(loopData[2])) != null && boundingBoxHits[1].t() > afterTime) 
-		 *     return new HitVoxel(ray, boundingBoxHits[1], xe - xd, ye - yd, ze - zd);
-		 */
+		Vec3 s0 = ray.d().signum();
+		Vec3 s1 = s0.inverse();
+		Vec3 s2 = s1.add(Vec3.EXYZ).mul(0.5);
 		
-		int[] xi = {  0,  0, xd };
-		int[] yi = {  0, yd,  0 };
-		int[] zi = { zd,  0,  0 };
+		Vec3 t = Vec3.xyz(
+				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EX)).hits(ray)[0].t(), 
+				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EY)).hits(ray)[0].t(), 
+				HalfSpace.pn(v0.add(s2), s1.mul(Vec3.EZ)).hits(ray)[0].t());
 
-		while (	xs != -1 && xs != xe &&
-				ys != -1 && ys != ye &&
-				zs != -1 && zs != ze ) {
+		Vec3 dt = s0.div(ray.d());
+		
+		while (v0.inBoundingBox(v1)) {
 			
-			Vec3 p = Vec3.xyz(xs, ys, zs);
-			Hit[] hits = getHits(p, ray);
-			
-			if (isPopulated(p) && hits[0].t() > afterTime)				// if rays hits the voxel AND there is a voxel 
-				return new HitVoxel(ray, hits[0], xs, ys, zs);	// there AND it's after afterTime...
-			
-			Hit[][] neighbours = new Hit[3][2];					// ray can intersect no more than three voxels
-			
-			int idx = -1;
-			double minTime = Double.MAX_VALUE;
-			
-			for (int i = 0; i < neighbours.length; i++) {
-				
-				neighbours[i] = getHits(p.add(Vec3.xyz(xi[i], yi[i], zi[i])), ray);
-				
-				if (neighbours[i].length == 0) {
-					continue;
-				} else if (minTime > neighbours[i][0].t()) {
-					idx = i;
-					minTime = neighbours[i][0].t();
-				}
-			}
-			
-			xs += xi[idx];
-			ys += yi[idx];
-			zs += zi[idx];
+			if (isPopulated(v0) && t.max() > afterTime)
+				return new HitVoxel(ray, HitData.tn(t.max(), s1.mul(Vec3.E[t.maxIndex()])), v0);
+
+			Vec3 tNext = t.add(dt);
+			int k = tNext.minIndex();
+			v0 = v0.add(s0.mul(Vec3.E[k]));
+			t = t.add(dt.mul(Vec3.E[k]));
 		}
 		
 		return Hit.POSITIVE_INFINITY;
@@ -104,6 +79,8 @@ public class FGridMarch1 extends BaseF {
 	
 	@Override
 	public Hit[] hits(Ray ray) {
+		
+		// NOT YET IMPLEMENTED
 		
 		Hit[] boundingBoxHits = getHits(Vec3.ZERO, Vec3.xyz(lenX(), lenY(), lenZ()), ray);
 		

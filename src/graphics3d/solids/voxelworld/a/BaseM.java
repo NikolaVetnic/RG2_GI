@@ -64,39 +64,21 @@ public abstract class BaseM implements Solid {
 	protected int lenZ()	{ return len.zInt();	}
 	
 	
-	protected boolean isPopulated(int i, int j, int k) {
-		return model[0][i][j][k]; 		
-	}
-	
-	
-	protected boolean isPopulated(Vec3 p) { 
-		return model[0][p.xInt()][p.yInt()][p.zInt()]; 
-	}
-	
-	
-	protected boolean isPopulated(int l, Vec3 p) { 
-		return model[l][p.xInt()][p.yInt()][p.zInt()]; 
-	}
-	
-	
 	protected int[] lenA() {
 		return new int[] { lenX(), lenY(), lenZ() };
 	}
 	
+	
+	protected boolean isPopulated(int i, int j, int k) 	{ return model[0][i][j][k]; 						}
+	protected boolean isPopulated(Vec3 p) 				{ return model[0][p.xInt()][p.yInt()][p.zInt()]; 	}
+	protected boolean isPopulated(int l, Vec3 p) 		{ return model[l][p.xInt()][p.yInt()][p.zInt()]; 	}
+	
+	
+	public Color color(int x, int y, int z) 			{ return diffuse[x][y][z]; 							}
+	
 
-	public boolean[][][][] model() {
-		return model;
-	}
-	
-	
-	public Color[][][] diffuse() {
-		return diffuse;
-	}
-	
-	
-	public Color color(int x, int y, int z) {
-		return diffuse[x][y][z];
-	}
+	public boolean[][][][] model() 	{ return model; 	}
+	public Color[][][] diffuse() 	{ return diffuse; 	}
 	
 	
 	protected static Hit[] getHits(Vec3 p, Vec3 d, Ray ray) {

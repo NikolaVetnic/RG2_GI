@@ -2,7 +2,7 @@ package graphics3d;
 
 import graphics3d.buffers.Buffering;
 import graphics3d.buffers.MultiBuffering;
-import graphics3d.scenes.VoxelWorld_TestF;
+import graphics3d.scenes.VoxelWorld_TestFTerrain;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
 
 public class Runner implements Drawing {
 	
-	static final Vector imageSize = Vector.xy(640, 640);
+	static final Vector imageSize = Vector.xy(1280, 720);
 	static final PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
 	static final int PARALLELISM = ForkJoinPool.getCommonPoolParallelism();
 	
@@ -108,8 +108,9 @@ public class Runner implements Drawing {
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestImageTextures.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestQuadrics.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.TestMesh.Factory();
-//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene.Factory();
-	Function1<Scene, Double> fScene = new VoxelWorld_TestF.Factory();
+	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestPFScene.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestFTerrain.Factory();
 	
 	
 	Renderer renderer;

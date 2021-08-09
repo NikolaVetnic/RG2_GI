@@ -1,15 +1,13 @@
-package graphics3d.solids.voxelworld.f;
+package graphics3d.solids.voxelworld.pf;
 
 import graphics3d.*;
 import graphics3d.solids.voxelworld.d.HitVoxel;
-import graphics3d.solids.voxelworld.d.VoxelData;
 import graphics3d.solids.voxelworld.a.BasePF;
-import graphics3d.solids.voxelworld.a.BaseF;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class FGridMarch2O extends BaseF {
+public class PFGridMarch2O extends BasePF {
 
 
 	/********************************************************************
@@ -21,16 +19,16 @@ public class FGridMarch2O extends BaseF {
 	 *******************************************************************/
 
 
-	protected FGridMarch2O(Vec3 d, Function<Vec3, VoxelData> f) { super(d, f); }
+	protected PFGridMarch2O(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) { super(d, p, c); }
 
 
-	public static FGridMarch2O d(Vec3 d, Function<Vec3, VoxelData> f) 	{
-		return new FGridMarch2O(d, f);
+	public static PFGridMarch2O d(Vec3 d, Predicate<Vec3> p, Function<Vec3, Color> c) 	{
+		return new PFGridMarch2O(d, p, c);
 	}
 
 
-	public static FGridMarch2O xyz(int x, int y, int z, Function<Vec3, VoxelData> f) {
-		return new FGridMarch2O(Vec3.xyz(x, y, z), f);
+	public static PFGridMarch2O xyz(int x, int y, int z, Predicate<Vec3> p, Function<Vec3, Color> c) {
+		return new PFGridMarch2O(Vec3.xyz(x, y, z), p, c);
 	}
 
 	
