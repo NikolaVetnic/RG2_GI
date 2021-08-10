@@ -8,6 +8,7 @@ import graphics3d.Vec3;
 import graphics3d.solids.Box;
 import graphics3d.solids.voxelworld.d.ModelData3;
 import graphics3d.solids.voxelworld.d.ModelData4;
+import graphics3d.solids.voxelworld.d.TerrainPalette;
 
 public abstract class BaseM implements Solid {
 	
@@ -43,6 +44,30 @@ public abstract class BaseM implements Solid {
 		this.model[0] = model;
 		this.diffuse = diffuse;
 		this.len = Vec3.xyz(model.length, model[0].length, model[0][0].length);
+	}
+
+	private Color[][][] getDiffuseFromTerrainPalette(TerrainPalette palette) {
+
+		Color[][][] output = new Color[lenX()][lenY()][lenZ()];
+
+		for (int i = 0; i < lenX(); i++) {
+			for (int j = 0; j < lenY(); j++) {
+				for (int k = 0; k < lenZ(); k++) {
+
+					double h = 1.0 * k / lenZ();
+
+					output[i][j][k] = palette.colors()[5];
+
+					if (h < palette.heights()[4]) output[i][j][k] = palette.colors()[4];
+					if (h < palette.heights()[3]) output[i][j][k] = palette.colors()[3];
+					if (h < palette.heights()[2]) output[i][j][k] = palette.colors()[2];
+					if (h < palette.heights()[1]) output[i][j][k] = palette.colors()[1];
+					if (h < palette.heights()[0]) output[i][j][k] = palette.colors()[0];
+				}
+			}
+		}
+
+		return output;
 	}
 
 

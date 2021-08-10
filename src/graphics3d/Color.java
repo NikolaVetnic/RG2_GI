@@ -272,5 +272,9 @@ public class Color {
 	public static double byteToValue(int x) {
 		return inverseGamma(x / 255.0);
 	}
-	
+
+
+	public double r() { return r; }
+	public double g() { return g; }
+	public double b() { return b; }
 }

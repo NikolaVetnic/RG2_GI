@@ -10,16 +10,18 @@ import graphics3d.Color;
 import graphics3d.Vec3;
 import graphics3d.solids.voxelworld.d.ModelData3;
 import graphics3d.solids.voxelworld.d.ModelData4;
+import graphics3d.solids.voxelworld.d.TerrainPalette;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
 public class Loaders {
 	
 	
-	// map, set, line not working as of 20210725 major overhaul - repairs needed
-	
-	
-	private static final int DEFAULT_MAP_HEIGHT = 50;
+	private static final int DEFAULT_MAP_HEIGHT = 45;
+	private static final TerrainPalette DEFAULT_PALETTE = TerrainPalette.ARCTIC;
+
+
+	private static boolean lerpMapColors = true;
 	
 	
 	public static ModelData3 map(String path) throws IOException {
@@ -44,12 +46,32 @@ public class Loaders {
 		for (int j = 0; j < y; j++) {
 			for (int i = 0; i < x; i++) {
 				
-				javafx.scene.paint.Color c = pr.getColor(i, j);
-				int currZ = (int) (c.getBrightness() * z);
-				
+				javafx.scene.paint.Color imageValue = pr.getColor(i, j);
+				int currZ = (int) (imageValue.getBrightness() * z);
+
 				for (int k = 0; k < currZ; k++) {
 					arr0[i][j][k] = true;
-					arr1[i][j][k] = Color.rgb(c.getRed(), c.getGreen(), c.getBlue());
+					arr1[i][j][k] = lerpMapColors ?
+							DEFAULT_PALETTE.lerpedColorAtHeightMixedWithImageValue(
+									imageValue.getBrightness(), 1.0, imageValue) :
+							DEFAULT_PALETTE.colorAtHeightMixedWithImageValue(
+									imageValue.getBrightness(), 1.0, imageValue);
+				}
+
+				if (!DEFAULT_PALETTE.isArid()) {
+
+					int seaLevelHeight = (int) (DEFAULT_PALETTE.heightNormalized(1) * z);
+
+					if (currZ >= seaLevelHeight) {
+						for (int k = 0; k < seaLevelHeight; k++) {
+							arr0[i][j][k] = true;
+							arr1[i][j][k] = lerpMapColors ?
+									DEFAULT_PALETTE.lerpedColorAtHeightMixedWithImageValue(
+											imageValue.getBrightness(), 1.0, imageValue) :
+									DEFAULT_PALETTE.colorAtHeightMixedWithImageValue(
+											imageValue.getBrightness(), 1.0, imageValue);
+						}
+					}
 				}
 			}
 		}

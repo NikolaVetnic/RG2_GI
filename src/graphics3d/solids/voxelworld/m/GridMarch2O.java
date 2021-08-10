@@ -9,6 +9,7 @@ import graphics3d.Ray;
 import graphics3d.Solid;
 import graphics3d.Vec3;
 import graphics3d.solids.voxelworld.d.HitVoxel;
+import graphics3d.solids.voxelworld.d.TerrainPalette;
 import graphics3d.solids.voxelworld.u.Loaders;
 import graphics3d.solids.voxelworld.d.ModelData3;
 import graphics3d.solids.voxelworld.d.ModelData4;
