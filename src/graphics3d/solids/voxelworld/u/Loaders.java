@@ -17,8 +17,8 @@ import javafx.scene.image.PixelReader;
 public class Loaders {
 	
 	
-	private static final int DEFAULT_MAP_HEIGHT = 45;
-	private static final TerrainPalette DEFAULT_PALETTE = TerrainPalette.ARCTIC;
+	private static final int DEFAULT_MAP_HEIGHT = 100;
+	private static final TerrainPalette DEFAULT_PALETTE = TerrainPalette.PASTORAL;
 
 
 	private static boolean lerpMapColors = true;

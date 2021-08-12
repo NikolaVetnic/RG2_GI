@@ -1,6 +1,8 @@
 package graphics3d.scenes;
 
 import graphics3d.*;
+import graphics3d.solids.Ball;
+import graphics3d.solids.Box;
 import graphics3d.solids.HalfSpace;
 import graphics3d.solids.voxelworld.m.GridMarch2;
 import graphics3d.solids.voxelworld.m.GridMarch2O;
@@ -18,19 +20,19 @@ public class VoxelWorld_TestMap extends SceneBase {
 
 	public static class Factory implements Function1<Scene, Double> {
 
-		@GadgetDouble(p = -.5, q = 0.5) double rotateX = 0.0;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateX = 0.125;
 		@GadgetDouble(p = -.5, q = 0.5) double rotateY = 0.0;
 		@GadgetDouble(p = -.5, q = 0.5) double rotateZ = 0.0;
 
-		@GadgetDouble(p = -100, q = 100) double translateX = 0.0;
-		@GadgetDouble(p = -100, q = 100) double translateY = 0.0;
-		@GadgetDouble(p = -100, q = 100) double translateZ = 0.5;
+		@GadgetDouble(p = -1000, q = 1000) double translateX = 0.0;
+		@GadgetDouble(p = -1000, q = 1000) double translateY = -150.0;
+		@GadgetDouble(p = -1000, q = 1000) double translateZ = 125;
 
 		@GadgetInteger(min = 0, max = 10) int xInt = 0;
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
 		@GadgetInteger(min = 3, max = 10) int zInt = 0;
 
-		@GadgetDouble(p = 0, q = 5.0) double scale = 0.05;
+		@GadgetDouble(p = 0, q = 5.0) double scale = 0.01875;
 
 		@GadgetInteger int seed = 129832191;
 
@@ -76,7 +78,7 @@ public class VoxelWorld_TestMap extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.map("img//ares-vallis.jpg");
 //		GridMarch1 	vo = GridMarch1	.map("img//ares-vallis.jpg");
 //		GridMarch2	vo = GridMarch2	.map("img//ares-vallis.jpg");
-		GridMarch2O	vo = GridMarch2O.map("img//valles-marineris.jpg");
+		GridMarch2O	vo = GridMarch2O.map("img//ares-vallis-raised-1536x1024.jpg");
 //		OctreeBF	vo = OctreeBF	.map("img//ares-vallis.jpg");
 //		OctreeRec	vo = OctreeRec	.map("img//ares-vallis.jpg");
 //		OctreeRecO 	vo = OctreeRecO	.map("img//ares-vallis.jpg");
