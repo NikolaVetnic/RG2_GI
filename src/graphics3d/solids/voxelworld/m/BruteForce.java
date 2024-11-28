@@ -62,7 +62,7 @@ public class BruteForce extends BaseM {
 							out = h[0];
 							v0 = Vec3.xyz(i, j, k);
 						}
-					} else if (h[1].t() > afterTime){
+					} else if (h.length > 1 && h[1].t() > afterTime) {
 						if (h[1].t() < out.t()) {
 							out = h[1];
 							v0 = Vec3.xyz(i, j, k);
