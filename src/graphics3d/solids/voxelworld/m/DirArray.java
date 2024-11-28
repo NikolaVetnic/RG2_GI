@@ -23,9 +23,9 @@ public class DirArray extends BaseM {
 	 * ID : 02															*
 	 * 																	*
 	 * Description: uses array to store hits, the direction in which t-	*
-	 * he voxel array is iterrated is based on the ray direction, disc-	*
-	 * ards hits between adjecent voxels; the array	is trimmed, put out	* 
-	 * as usual; firstHit implemented.									*
+	 * he voxel array is iterated is based on the ray direction, disca-	*
+	 * rds hits between adjecent voxels; the array is trimmed, the out-	* 
+	 * put is as usual; firstHit implemented.							*
 	 * 																	*
 	 *******************************************************************/
 
