@@ -74,7 +74,7 @@ public class GridMarch1 extends BaseM {
 			Vec3 p = Vec3.xyz(xs, ys, zs);
 			Hit[] hits = getHits(p, ray);
 			
-			if (isPopulated(p) && hits[0].t() > afterTime)				// if rays hits the voxel AND there is a voxel 
+			if (isPopulated(p) && hits[0].t() > afterTime)		// if rays hits the voxel AND there is a voxel 
 				return new HitVoxel(ray, hits[0], xs, ys, zs);	// there AND it's after afterTime...
 			
 			Hit[][] neighbours = new Hit[3][2];					// ray can intersect no more than three voxels
