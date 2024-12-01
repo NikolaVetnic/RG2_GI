@@ -28,6 +28,7 @@ public class TestMesh extends SceneBase {
 			{ "v", "M_V SpacecraftRotated" },
 			{ "v", "M_V SpikyBox" },
 			{ "v", "M_V UtahTeapot" },
+			{ "v", "M_V ArresVallis" },
 			
 			{ "vt", "M_VT ChamferedBox" },
 			{ "vt", "M_VT ChamferedBoxOptimizedVT" },
@@ -69,7 +70,7 @@ public class TestMesh extends SceneBase {
 		double s = 0.45;
 
 		@GadgetInteger(min = 0, max = 7)
-		int xInt = 0;
+		int xInt = 4;
 
 		@GadgetInteger(min = 3, max = 100)
 		int yInt = 0;
@@ -131,7 +132,7 @@ public class TestMesh extends SceneBase {
 		Solid mwf = null;
 		
 		try {
-			mwf = MeshWireframe.m(Mesh.loadVT("M_VT Spacecraft")).transformed(
+			mwf = MeshWireframe.m(Mesh.loadV("M_V ArresVallis")).transformed(
 					 Transform.translation		(Vec3.xyz(dx, dy, dz))
 			.andThen(Transform.rotationAboutY	(px)
 			.andThen(Transform.rotationAboutZ	(py)
@@ -159,7 +160,7 @@ public class TestMesh extends SceneBase {
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 9, 0), Vec3.xyz( 0,-1, 0)), Material.LIGHT),
 				Body.uniform(HalfSpace.pn(Vec3.xyz( 0, 0, 3), Vec3.xyz( 0, 0,-1)), mDiffuseP	 ),
 				
-				Body.uniform(mwf, mDiffuseY)
+				Body.uniform(m, mDiffuseY)
 		));
 		
 		cameraTransform = Transform.IDENTITY
