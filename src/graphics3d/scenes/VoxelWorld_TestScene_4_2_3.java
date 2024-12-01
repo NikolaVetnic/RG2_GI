@@ -12,7 +12,7 @@ import graphics3d.Scene;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.m.OctreeRecO;
+import graphics3d.solids.voxelworld.m.GridMarch2O;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -34,7 +34,7 @@ public class VoxelWorld_TestScene_4_2_3 extends SceneBase {
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
 		@GadgetInteger(min = 3, max = 10) int zInt = 0;
 
-		@GadgetDouble(p = 0, q = 5.0) double scale = 0.09375;
+		@GadgetDouble(p = 0, q = 5.0) double scale = 0.09375 - 1 / 256.0;
 
 		@GadgetInteger int seed = 129832191;
 
@@ -90,10 +90,10 @@ public class VoxelWorld_TestScene_4_2_3 extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.model(arr0, arr1);
 //		GridMarch1 	vo = GridMarch1	.model(arr0, arr1);
 //		GridMarch2 	vo = GridMarch2	.model(arr0, arr1);
-//		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
+		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
 //		OctreeBF	vo = OctreeBF	.model(arr0, arr1);
 //		OctreeRec	vo = OctreeRec	.model(arr0, arr1);
-		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
+//		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
 
 		Transform t = Transform.translation			(Vec3.xyz(translateX, translateY, translateZ).sub(dim.mul(0.5)))
 				.andThen(Transform.rotationAboutX	(rotateX)

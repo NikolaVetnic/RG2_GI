@@ -12,7 +12,7 @@ import graphics3d.Scene;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.m.DirArray;
+import graphics3d.solids.voxelworld.m.OctreeRecO;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
 import mars.functions.interfaces.Function1;
@@ -86,14 +86,14 @@ public class VoxelWorld_TestScene_4_3_1 extends SceneBase {
 		}
 
 //		BruteForce 	vo = BruteForce	.model(arr0, arr1);
-		DirArray 	vo = DirArray	.model(arr0, arr1);
+//		DirArray 	vo = DirArray	.model(arr0, arr1);
 //		DirArrayO 	vo = DirArrayO	.model(arr0, arr1);
 //		GridMarch1 	vo = GridMarch1	.model(arr0, arr1);
 //		GridMarch2 	vo = GridMarch2	.model(arr0, arr1);
 //		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
 //		OctreeBF	vo = OctreeBF	.model(arr0, arr1);
 //		OctreeRec	vo = OctreeRec	.model(arr0, arr1);
-//		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
+		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
 
 		Transform t = Transform.translation			(Vec3.xyz(translateX, translateY, translateZ).sub(dim.mul(0.5)))
 				.andThen(Transform.rotationAboutX	(rotateX)

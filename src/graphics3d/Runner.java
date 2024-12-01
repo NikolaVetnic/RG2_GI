@@ -111,8 +111,25 @@ public class Runner implements Drawing {
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestPFScene.Factory();
 //	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestFTerrain.Factory();
-	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap.Factory();
 	
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_1_1.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_1_2.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_1_3.Factory();
+	
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_2_1.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_2_2.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_2_3.Factory();
+	
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_3_1.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_3_2.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestScene_4_3_3.Factory();
+	
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap_Small.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap_Medium.Factory();
+//	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap_Large.Factory();
+	
+	Function1<Scene, Double> fScene = new graphics3d.scenes.VoxelWorld_TestMap_Landscape.Factory();
 	
 	Renderer renderer;
 	int iterationsRendering;

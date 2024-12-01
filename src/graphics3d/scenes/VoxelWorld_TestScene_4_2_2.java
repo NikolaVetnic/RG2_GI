@@ -34,7 +34,7 @@ public class VoxelWorld_TestScene_4_2_2 extends SceneBase {
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
 		@GadgetInteger(min = 3, max = 10) int zInt = 0;
 
-		@GadgetDouble(p = 0, q = 5.0) double scale = .1875;
+		@GadgetDouble(p = 0, q = 5.0) double scale = .1875 - .009375;
 
 		@GadgetInteger int seed = 129832191;
 
