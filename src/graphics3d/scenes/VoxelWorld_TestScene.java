@@ -12,7 +12,6 @@ import graphics3d.Scene;
 import graphics3d.Transform;
 import graphics3d.Vec3;
 import graphics3d.solids.HalfSpace;
-import graphics3d.solids.voxelworld.d.TerrainPalette;
 import graphics3d.solids.voxelworld.m.GridMarch2O;
 import mars.drawingx.gadgets.annotations.GadgetDouble;
 import mars.drawingx.gadgets.annotations.GadgetInteger;
@@ -23,19 +22,19 @@ public class VoxelWorld_TestScene extends SceneBase {
 
 	public static class Factory implements Function1<Scene, Double> {
 
-		@GadgetDouble(p = -.5, q = 0.5) double rotateX = -0.15;
-		@GadgetDouble(p = -.5, q = 0.5) double rotateY = -0.50;
-		@GadgetDouble(p = -.5, q = 0.5) double rotateZ = 0.0;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateX = -0.125;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateY = -0.375;
+		@GadgetDouble(p = -.5, q = 0.5) double rotateZ = -0.125;
 
-		@GadgetDouble(p = -100, q = 100) double translateX = -75.0;
+		@GadgetDouble(p = -100, q = 100) double translateX = 0.0 /* -75.0 */;
 		@GadgetDouble(p = -100, q = 100) double translateY = 0.0;
-		@GadgetDouble(p = -100, q = 100) double translateZ = -37.5;
+		@GadgetDouble(p = -100, q = 100) double translateZ = 7.5 /* -37.5 */;
 		
 		@GadgetInteger(min = 0, max = 10) int xInt = 0;
 		@GadgetInteger(min = 3, max = 10) int yInt = 0;
 		@GadgetInteger(min = 3, max = 10) int zInt = 0;
 
-		@GadgetDouble(p = 0, q = 5.0) double scale = 0.0625;
+		@GadgetDouble(p = 0, q = 5.0) double scale = /* 0.0625 */ .375;
 
 		@GadgetInteger int seed = 129832191;
 
@@ -66,7 +65,7 @@ public class VoxelWorld_TestScene extends SceneBase {
 		
 		Random rng = new Random(seed);
 
-		int lvl = 3;
+		int lvl = 6;
 		
 		double rngLimit = 0.0025;
 		
@@ -84,10 +83,13 @@ public class VoxelWorld_TestScene extends SceneBase {
 						arr1[i][j][k] = Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0);
 					}
 					
-					if (i == j && j == k) {						// test model, cube diagonal
-						arr0[i][j][k] = false;
-						arr1[i][j][k] = Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0);
-					}
+//					if (i == j && j == k) {						// test model, cube diagonal
+//						arr0[i][j][k] = false;
+//						arr1[i][j][k] = Color.rgb(rng.nextDouble(), rng.nextDouble(), 0.0);
+//					}
+					
+//					arr0[i][j][k] = true;
+//					arr1[i][j][k] = Color.rgb(.8 * i / dim.xInt() + .2, 0.8 * j / dim.yInt() + .2, 0.0);
 				}
 			}
 		}
@@ -97,7 +99,7 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.model(arr0, arr1);
 //		GridMarch1 	vo = GridMarch1	.model(arr0, arr1);
 //		GridMarch2 	vo = GridMarch2	.model(arr0, arr1);
-//		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
+		GridMarch2O	vo = GridMarch2O.model(arr0, arr1);
 //		OctreeBF	vo = OctreeBF	.model(arr0, arr1);
 //		OctreeRec	vo = OctreeRec	.model(arr0, arr1);
 //		OctreeRecO	vo = OctreeRecO	.model(arr0, arr1);
@@ -119,7 +121,7 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		DirArrayO 	vo = DirArrayO	.map("img//ares-vallis.jpg");
 //		GridMarch1 	vo = GridMarch1	.map("img//ares-vallis.jpg");
 //		GridMarch2 	vo = GridMarch2	.map("img//ares-vallis.jpg");
-		GridMarch2O	vo = GridMarch2O.map("img//valles-marineris.jpg");
+//		GridMarch2O	vo = GridMarch2O.map("img//valles-marineris.jpg");
 //		OctreeBF	vo = OctreeBF	.map("img//ares-vallis.jpg");
 //		OctreeRec	vo = OctreeRec	.map("img//ares-vallis.jpg");
 //		OctreeRecO	vo = OctreeRecO	.map("img//ares-vallis.jpg");
@@ -134,7 +136,83 @@ public class VoxelWorld_TestScene extends SceneBase {
 //		OctreeBF	vo = OctreeBF	.set("img//voxel_set_01/test_000.bmp");
 //		OctreeRec	vo = OctreeRec	.set("img//voxel_set_01/test_000.bmp");
 //		OctreeRecO 	vo = OctreeRecO	.set("img//voxel_set_01/test_000.bmp");
+		
+		// =-=-=-=
+		
+		/*
+		var model = vo.model()[0];
+		var height = vo.len().z();
+		var sheet = new Vec3[vo.len().xInt()][vo.len().yInt()];
+		
+		for (var i = 0; i < vo.len().xInt(); i++) {
+			for (var j = 0; j < vo.len().yInt(); j++) {
+				
+				var prevKIdx = 0;
+				var prevKVal = model[i][j][0];
+				
+				for (var k = 1; k < vo.len().zInt(); k++) {
+					
+					if (prevKVal && !model[i][j][k])
+						break;
+					
+					prevKIdx = k;
+					prevKVal = true;
+				}
+				
+				sheet[i][j] = Vec3.xyz(i - vo.len().xInt() / 2, j - vo.len().yInt() / 2, prevKIdx);
+			}
+		}
+		*/
+		
+//        String filePath = "mesh//M_V ArresVallisLoad.obj"; // Specify the path and filename
+//
+//        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+//
+//			for (var i = 0; i < vo.len().xInt(); i++) {
+//				for (var j = 0; j < vo.len().yInt(); j++) {
+//					writer.write("v " + sheet[i][j].xInt() + " " + sheet[i][j].yInt() + " " + (1 - sheet[i][j].zInt() / vo.len().z() + .5) * 15);
+//					writer.newLine();
+//				}
+//			}
+//			
+//			writer.newLine();
+//		
+//			for (var i = 1; i < vo.len().xInt(); i++) {
+//				for (var j = 1; j < vo.len().yInt(); j++) {
+//					
+//					/*
+//					 * 11 12 ...
+//					 * 1  2  ...
+//					 * 
+//					 * 1 2 12 -> 	(j - 1) * vo.len().yInt()   +    (i - 1)
+//					 * 				(j - 1) * vo.len().yInt()	+	 (i - 0)
+//					 * 				(j - 0) * vo.len().yInt()	+	 (i - 1)
+//					 * 
+//					 * 2 11 12 ->	(j - 1) * vo.len().yInt()	+	 (i - 0)
+//					 * 				(j - 0) * vo.len().yInt()	+	 (i - 1)
+//					 * 				(j - 0) * vo.len().yInt()	+	 (i - 0)
+//					 */
+//					
+//					var f1_0 = (j - 1) * vo.len().yInt() + (i - 1) + 1;
+//					var f1_1 = (j - 1) * vo.len().yInt() + (i - 0) + 1;
+//					var f1_2 = (j - 0) * vo.len().yInt() + (i - 1) + 1;
+//					
+//					var f2_0 = (j - 1) * vo.len().yInt() + (i - 0) + 1;
+//					var f2_1 = (j - 0) * vo.len().yInt() + (i - 1) + 1;
+//					var f2_2 = (j - 0) * vo.len().yInt() + (i - 0) + 1;
+//					
+//					writer.write("f " + f1_0 + " " + f1_1 + " " + f1_2); writer.newLine();
+//					writer.write("f " + f2_2 + " " + f2_1 + " " + f2_0); writer.newLine();
+//				}
+//			}
+//		
+//        } catch (IOException e) {
+//        	e.printStackTrace();
+//        }
+//		
+//		Solid m = Mesh.loadV("M_V ArresVallisLoad");
 
+		// =-=-=-=
 
 		Transform t = Transform.translation			(Vec3.xyz(translateX, translateY, translateZ).sub(dim.mul(0.5)))
 				.andThen(Transform.rotationAboutX	(rotateX)
@@ -151,7 +229,8 @@ public class VoxelWorld_TestScene extends SceneBase {
 				
 //				Body.uniform(vo.transformed(t), mDiffuseY)
 				Body.voxelDiffuseF(vo, t)
-		));
+//				Body.uniform(m.transformed(t), mDiffuseY)
+ 		));
 		
 		cameraTransform = Transform.IDENTITY
 				.andThen(Transform.translation(Vec3.xyz(0.0, 0.0, -10)))
