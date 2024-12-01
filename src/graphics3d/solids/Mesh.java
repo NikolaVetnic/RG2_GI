@@ -341,7 +341,12 @@ public class Mesh implements Solid {
 		
 		if (hits.size() == 0) return Solid.NO_HITS;
 		
-		hits.sort((h1, h2) -> h1.t() - h2.t() > 0 ? 1 : h1.t() - h2.t() == 0 ? 0 : -1);
+		try {
+//			hits.sort((h1, h2) -> h1.t() - h2.t() > 0 ? 1 : h1.t() - h2.t() == 0 ? 0 : -1);
+			hits.sort((h1, h2) -> h1.t() > h2.t() ? 1 : h1.t() < h2.t() ? -1 : 0);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 		Hit[] out = new Hit[hits.size()];
 		for (int i = 0; i < out.length; i++) out[i] = hits.get(i);
@@ -352,9 +357,9 @@ public class Mesh implements Solid {
 	
 	private boolean isPointOnPlane(Vec3 p, Vec3[] triangle) {
 		
-		// Naravno, vektorski možeš rešiti lako
-		// uzmeš vektor AP i uradiš skalarni proizvod sa vektorom AB x AC
-		// To je proporcionalno dužini projekcije AP na normalu na ravan
+		// Naravno, vektorski moï¿½eï¿½ reï¿½iti lako
+		// uzmeï¿½ vektor AP i uradiï¿½ skalarni proizvod sa vektorom AB x AC
+		// To je proporcionalno duï¿½ini projekcije AP na normalu na ravan
 		
 		double x1 = triangle[0].x();
 		double y1 = triangle[0].y();
