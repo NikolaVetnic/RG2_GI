@@ -1,8 +1,15 @@
 package graphics3d;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.IntBuffer;
+import java.util.concurrent.ForkJoinPool;
+import java.util.stream.IntStream;
+
+import javax.imageio.ImageIO;
+
 import graphics3d.buffers.Buffering;
 import graphics3d.buffers.MultiBuffering;
-import graphics3d.scenes.VoxelWorld_TestFTerrain;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
@@ -12,7 +19,11 @@ import mars.drawingx.application.Options;
 import mars.drawingx.drawing.Drawing;
 import mars.drawingx.drawing.DrawingUtils;
 import mars.drawingx.drawing.View;
-import mars.drawingx.gadgets.annotations.*;
+import mars.drawingx.gadgets.annotations.DoNotDetectChanges;
+import mars.drawingx.gadgets.annotations.GadgetBoolean;
+import mars.drawingx.gadgets.annotations.GadgetDouble;
+import mars.drawingx.gadgets.annotations.GadgetString;
+import mars.drawingx.gadgets.annotations.RecurseGadgets;
 import mars.functions.interfaces.Function0;
 import mars.functions.interfaces.Function1;
 import mars.functions.interfaces.Function2;
@@ -22,13 +33,6 @@ import mars.input.InputEvent;
 import mars.input.InputState;
 import mars.time.ProfilerPool;
 import mars.time.Timer;
-
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
-import java.nio.IntBuffer;
-import java.util.concurrent.ForkJoinPool;
-import java.util.stream.IntStream;
 
 
 public class Runner implements Drawing {
