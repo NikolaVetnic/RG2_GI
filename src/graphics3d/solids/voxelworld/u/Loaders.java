@@ -62,7 +62,7 @@ public class Loaders {
 
 					int seaLevelHeight = (int) (DEFAULT_PALETTE.heightNormalized(1) * z);
 
-					if (currZ >= seaLevelHeight) {
+					if (currZ <= seaLevelHeight) {
 						for (int k = 0; k < seaLevelHeight; k++) {
 							arr0[i][j][k] = true;
 							arr1[i][j][k] = lerpMapColors ?
