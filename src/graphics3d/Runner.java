@@ -235,6 +235,9 @@ public class Runner implements Drawing {
 	}
 	
 	
+	private int lastIterationsRendering = -1;
+	
+	
 	@Override
 	public void draw(View view, InputState inputState) {
 		if (!initialized) {
@@ -267,6 +270,15 @@ public class Runner implements Drawing {
 		
 		synchronized (toneMappingMonitor) {
 			toneMappingMonitor.notifyAll();
+		}
+		
+		// Check if iterationsRendering has changed
+		if (iterationsRendering != lastIterationsRendering && iterationsRendering > 0) {
+			// Print the timePerIterationRendering to console
+			System.out.printf("Time per iteration %2d rendering: %.3f seconds%n", iterationsRendering, timePerIterationRendering);
+			
+			// Update lastIterationsRendering to the current value
+			lastIterationsRendering = iterationsRendering;
 		}
 		
 		if (showStats) {
