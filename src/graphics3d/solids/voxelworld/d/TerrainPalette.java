@@ -27,6 +27,17 @@ public class TerrainPalette {
 			}, new double[] { -0.5, 0.0, 0.1, 0.4, 0.8 }, false );
 	
 	
+	public static final TerrainPalette PASTORAL_SHALLOW = new TerrainPalette(
+			new Color[] { 
+					Color.hsb(210, 0.70, 0.8), 		// duboka voda
+					Color.hsb(210, 0.70, 0.9), 		// voda
+					Color.hsb( 50, 0.50, 1.0), 		// pesak
+					Color.hsb(110, 0.60, 0.8), 		// trava
+					Color.hsb( 30, 0.60, 0.5), 		// planina
+					Color.hsb(  0, 0.00, 1.0)  		// sneg
+			}, new double[] { -0.6, -0.4, 0.1, 0.4, 0.8 }, false );
+	
+	
 	public static final TerrainPalette ARCTIC = new TerrainPalette(
 			new Color[] { 
 					Color.hsb(180, 0.70, 0.50),		// duboka voda
@@ -36,6 +47,17 @@ public class TerrainPalette {
 					Color.hsb(210, 0.15, 0.95),		// bregovi
 					Color.hsb(210, 0.05, 0.95)		// planine
 			}, new double[] { -0.5, 0.0, 0.1, 0.4, 0.8 }, false );
+	
+	
+	public static final TerrainPalette ARCTIC_SHALLOW = new TerrainPalette(
+			new Color[] { 
+					Color.hsb(180, 0.70, 0.50),		// duboka voda
+					Color.hsb(210, 0.70, 0.90),		// voda
+					Color.hsb( 30, 0.45, 0.30),		// blatnjava obala
+					Color.hsb(210, 0.30, 0.90),		// ravnica
+					Color.hsb(210, 0.15, 0.95),		// bregovi
+					Color.hsb(210, 0.05, 0.95)		// planine
+			}, new double[] { -0.6, -0.4, -0.3, 0.4, 0.8 }, false );
 	
 	
 	public static final TerrainPalette DUNE = new TerrainPalette(
