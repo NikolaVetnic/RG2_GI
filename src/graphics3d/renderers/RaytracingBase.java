@@ -1,14 +1,18 @@
 package graphics3d.renderers;
 
-import graphics3d.*;
+import java.util.stream.IntStream;
+
+import graphics3d.Camera;
+import graphics3d.Collider;
+import graphics3d.Color;
+import graphics3d.Ray;
+import graphics3d.Renderer;
+import graphics3d.Scene;
 import graphics3d.cameras.ThinLens;
-import graphics3d.colliders.BruteForce;
 import graphics3d.colliders.BruteForceFirstHit;
 import mars.geometry.Vector;
 import mars.random.sampling.Sampler;
 import mars.utils.Hashing;
-
-import java.util.stream.IntStream;
 
 public abstract class RaytracingBase implements Renderer {
 	
@@ -38,6 +42,7 @@ public abstract class RaytracingBase implements Renderer {
 //		collider = new BruteForce(scene.bodies());
 		collider = new BruteForceFirstHit(scene.bodies());
 		camera = new ThinLens(focalDistance, focalBlurR);
+//		camera = new Orthographic();
 
 		samplers = new Sampler[imageSize.yInt()];
 		
