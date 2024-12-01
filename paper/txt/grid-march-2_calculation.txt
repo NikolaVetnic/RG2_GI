@@ -1,0 +1,48 @@
+r(
+  Vec(0, 0),
+  Vec(0.832, 0.555))
+  
+v0 = (4, 3)
+v1 = (6, 4)
+
+s0 = ( 1,  1)
+s1 = (-1, -1)
+s2 = (( 1,  1) + (-1, -1)) * .5 = (0, 0)
+
+tx = Halfspace.pn(
+  p = (4, 3) + (0, 0) = (4, 3),
+  n = (-1, -1) * (1, 0) = (-1, 0)).hits(r)[0].t) = 4.808
+
+ty = Halfspace.pn(
+  p = p = (4, 3) + (0, 0) = (4, 3),
+  n = (-1, -1) * (0, 1) = (0, -1)).hits(r)[0].t) = 5.405
+
+t = (4.808, 5.405)
+
+dt = (1.2, 1.8) // vreme potrebno da zrak predje u sledeci Halfspace po osama
+
+// racunam za sve voksele na putanji
+
+v0 = (4, 3), v1 = (6, 4)
+v0.inBoundingBox(v1) -> true
+
+if (isPopulated(v0) && t.max() > afterTime)
+  t.max() = 5.405
+  out = HitVoxel(
+    r, // zrak
+    HitData( // pogodak
+      t = t.max(), 
+      n = s1.mul(Vec3.E[t.maxIndex()] = Vec3.EY) = (0, -1), 
+    v0) // pogodjeni voksel
+
+tNext = t.add(dt) = (4.808 + 1.2, 5.405 + 1.8) = (6.008, 7.205) // vreme kada zrak dostize osu x = 5, odnosno y = 4
+k = tNext.minIndex() = 0 // indeks prve sledece ose koju zrak preseca
+
+// sledeci pogodjeni voksel
+v0 = v0.add(s0.mul(Vec3.E[k])) = v0.add(s0.mul(Vec3.EX)) = (4, 3) + (1, 1).mul(1, 0) = (4, 3) + (1, 0) = (5, 3)
+t = t.add(dt.mul(Vec3.E[k])) = t.add(dt.mul(Vec3.EX)) = (4.808, 3.405) + (1.2, 1.8).mul((1, 0)) = (4.808, 5.405) + (1.2, 0) = (6.008, 5.405)
+
+
+
+
+
